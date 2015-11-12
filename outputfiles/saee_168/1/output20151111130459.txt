@@ -1,0 +1,7 @@
+Attention screen on 1447265099.241029
+Attention screen off 1447265099.270117
+Trial 0: Added 5 shares to trade. 1447265100.29272
+
+Trial 0: Pulling wheels 1447265100.598968
+
+Summary Trial0: Trade:5Account: [490]
