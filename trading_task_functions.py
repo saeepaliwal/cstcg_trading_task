@@ -337,7 +337,7 @@ def stock_split(c,task, positions, sizes):
                         gamble_button.draw(c.screen)
                         pygame.display.flip()
                         winsound.play()
-                        waitfun(1000)
+                        waitfun(2000)
                         task['winloss'][task['trial']] = 2*task['winloss'][task['trial']]
                         #show_win_banner(c, positions, task['winloss'][task['trial']])
                         #winsound.play()
@@ -347,7 +347,7 @@ def stock_split(c,task, positions, sizes):
                         pygame.display.flip()
                         c.screen.blit(card_lost,(x_pos,y_pos))
                         pygame.display.flip()
-                        waitfun(1000)
+                        waitfun(2000)
                         task['winloss'][task['trial']] = 0
                         decided = True
                 elif 'click' in no_gamble_button.handleEvent(event):

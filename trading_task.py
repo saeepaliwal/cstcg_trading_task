@@ -62,7 +62,7 @@ welcome_screen(c)
 instruction_screen(c)
 
 # Pull in task backend
-with open ('taskBackend_finance_test.txt','r') as f:
+with open ('taskBackend_finance.txt','r') as f:
     probability_trace = f.read().replace('\n', '')
 
 result_sequence = probability_trace.split(',')
@@ -120,6 +120,13 @@ for trial in range(NUM_TRIALS):
             #begin_training_screen(c)
             background_music.play(100,0)
 
+    if trial == 5:
+        background_music.stop()
+        c.blank_screen()
+        c.text_screen('End of training trials! Experiment begins now.', font=c.title, font_color=GOLD, valign='top', y_displacement= -45, wait_time=3000)  
+        c.blank_screen()
+        background_music.play(100,0)
+
     task['trade_sequence'] = []
     task['trial'] = trial
     task['current_price'][task['stock']].append(open_prices[task['stock']])
@@ -164,11 +171,9 @@ for trial in range(NUM_TRIALS):
                 # Add clear functionality here
                 elif 'click' in buttons['place_order'].handleEvent(event):
                     if task['trade_size'][trial] > 0:
+                        c.press_sound.play()
                         buttons['place_order'].draw(c.screen)
                         pygame.display.update()
-                        #leversound.play()
-                        #c.wait_fun(100)
-                        #leversound.stop()
                         c.log('Trial ' + str(trial) + ': Pulling wheels ' + repr(time.time()) + '\n')
                         c.log('Summary Trial' + str(trial) + ': Trade:' + str(task['trade_size'][trial]) + 'Account: ' + str([task['account'][trial]]))
                         task['trial_stage'] = 'result'
