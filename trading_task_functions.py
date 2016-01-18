@@ -4,7 +4,7 @@ from pygame import gfxdraw
 #from pylab import *
 import math
 import numpy
-from slot_buttons import SlotButton
+from trading_buttons import TradingButton
 from time import strftime,localtime
 import time
 import random
@@ -24,16 +24,31 @@ ORANGE = ( 208, 112,  43)
 RED    = ( 205,  73,  57)
 YELLOW = ( 231, 182,  40)
 BRIGHT_ORANGE = ( 242, 101,  34)
-GOLD   = ( 254, 195,  13)
+GOLD   = ( 242, 153,  36)
 TX_GREEN = (57, 255, 20)
 BLACK = (0,0,0)
 TX_RED = (249, 15, 0)
+PX_BLUE = ( 102, 255, 255)
 
 
 # Load images
 intro = pygame.image.load('./images/trading_task_welcome_banner.png').convert_alpha()
 small_win = pygame.image.load('./images/symbols_smallwin.png').convert_alpha()
 big_win = pygame.image.load('./images/symbols_megawin.png').convert_alpha()
+scoreboard = pygame.image.load('./images/trading_task_scoreboard.png').convert_alpha()
+
+# Load symbols
+symbols = {}
+symbols['1'] = pygame.image.load('./images/trading_task_symbol1.png').convert_alpha()
+symbols['2']  = pygame.image.load('./images/trading_task_symbol2.png').convert_alpha()
+symbols['3'] = pygame.image.load('./images/trading_task_symbol3.png').convert_alpha()
+symbols['4'] = pygame.image.load('./images/trading_task_symbol4.png').convert_alpha()
+symbols['5']  = pygame.image.load('./images/trading_task_symbol5.png').convert_alpha()
+symbols['6']  = pygame.image.load('./images/trading_task_symbol6.png').convert_alpha()
+symbols['7'] = pygame.image.load('./images/trading_task_symbol7.png').convert_alpha()
+symbols['8']  = pygame.image.load('./images/trading_task_symbol8.png').convert_alpha()
+symbols['9'] = pygame.image.load('./images/trading_task_symbol9.png').convert_alpha()
+symbols['10'] = pygame.image.load('./images/trading_task_symbol10.png').convert_alpha()
 
 
 # Load tickers
@@ -43,7 +58,19 @@ tickers['1'] = pygame.image.load('./images/trading_task_ticker1.png').convert_al
 tickers['2'] = pygame.image.load('./images/trading_task_ticker2.png').convert_alpha()
 tickers['3'] = pygame.image.load('./images/trading_task_ticker3.png').convert_alpha()
 
-win_banner = pygame.image.load('./images/symbols_banner.png').convert_alpha()
+# Load instructions
+instructions = []
+instructions.append(pygame.image.load('./instructions/Slide1.png').convert_alpha())
+instructions.append(pygame.image.load('./instructions/Slide2.png').convert_alpha())
+instructions.append(pygame.image.load('./instructions/Slide3.png').convert_alpha())
+instructions.append(pygame.image.load('./instructions/Slide4.png').convert_alpha())
+instructions.append(pygame.image.load('./instructions/Slide5.png').convert_alpha())
+instructions.append(pygame.image.load('./instructions/Slide6.png').convert_alpha())
+instructions.append(pygame.image.load('./instructions/Slide7.png').convert_alpha())
+
+spin_cover =  pygame.image.load('./images/trading_task_spin_cover.png').convert_alpha()
+
+win_banner = pygame.image.load('./images/trading_task_banner.png').convert_alpha()
 # Pull in sounds:
 spinsound = pygame.mixer.Sound('./sounds/spinning.wav')
 spinsound.set_volume(0.2)
@@ -57,7 +84,7 @@ spinstopsound.set_volume(0.7)
 # Load fonts
 ticker_font = pygame.font.Font('./fonts/ASTRII__.TTF',60)
 ticker_font_small = pygame.font.Font('./fonts/ASTRII__.TTF',35)
-money_font = pygame.font.Font('./fonts/DS-DIGIB.TTF',80)
+money_font = pygame.font.Font('./fonts/DS-DIGIB.TTF',50)
 split_font = pygame.font.Font('./fonts/Oswald-Bold.ttf', 60)
 def sigmoid(x):
     s =  1.0/(1.0 + numpy.exp(-1.0*x))
@@ -161,32 +188,37 @@ def get_screen_elements(c, task):
 
     positions['ticker'] = {}
     positions['ticker']['base_x'] = c.center_x-(tickers['0'].get_width()/2)
-    positions['ticker']['base_y'] = 50
-    positions['ticker']['x1'] =  c.center_x-(tickers['0'].get_width()/2) + 100 - 50
-    positions['ticker']['x2'] = c.center_x-(tickers['0'].get_width()/2) + 300 - 40
-    positions['ticker']['x3'] = c.center_x-(tickers['0'].get_width()/2) + 500 - 15
-    positions['ticker']['y']  =  7*tickers['0'].get_height()/10
+    positions['ticker']['base_y'] = 0
+    positions['ticker']['x1'] =  c.center_x-(tickers['0'].get_width()/2) + 100 - 20
+    positions['ticker']['x2'] = c.center_x-(tickers['0'].get_width()/2) + 300 - 45
+    positions['ticker']['x3'] = c.center_x-(tickers['0'].get_width()/2) + 500 - 75
+    positions['ticker']['y']  = tickers['0'].get_height() - 165
+    positions['ticker']['px1'] = c.center_x-(tickers['0'].get_width()/2) + 20
+    positions['ticker']['px2'] = c.center_x-(tickers['0'].get_width()/2) + 250
+    positions['ticker']['px3'] = c.center_x-(tickers['0'].get_width()/2) + 480
+
+    positions['ticker']['py'] = tickers['0'].get_height()/2 +30
 
     # Set up buttons
     buttons = {}
     
-    buttons['add_five'] = SlotButton(rect=(positions['bet_5_x'],positions['bet_5_y'], sizes['sbw'],sizes['sbh']),\
-    caption="+5 shares", fgcolor=c.background_color, bgcolor=BLUE, font=c.button,highlight=YELLOW)
+    buttons['add_five'] = TradingButton(rect=(positions['bet_5_x'],positions['bet_5_y'], sizes['sbw'],sizes['sbh']),\
+    caption="+5 shares", fgcolor=WHITE, bgcolor=c.background_color, font=c.button,highlight=YELLOW)
 
-    buttons['add_ten']= SlotButton(rect=(positions['bet_10_x'],positions['bet_10_y'], sizes['sbw'],sizes['sbh']),\
-    caption="+10 shares", fgcolor=c.background_color, bgcolor=GREEN, font=c.button)
+    buttons['add_ten']= TradingButton(rect=(positions['bet_10_x'],positions['bet_10_y'], sizes['sbw'],sizes['sbh']),\
+    caption="+10 shares", fgcolor=WHITE, bgcolor=c.background_color, font=c.button)
 
-    buttons['cashout'] = SlotButton(rect=(positions['cashout_x'],positions['cashout_y'], sizes['bbw']+35,sizes['xsbh']),\
-        caption="Cashout", fgcolor=c.background_color, bgcolor=WHITE, font=c.button)
+    buttons['cashout'] = TradingButton(rect=(positions['cashout_x'],positions['cashout_y'], sizes['bbw']+35,sizes['xsbh']),\
+        caption="Liquidate", fgcolor=WHITE, bgcolor=c.background_color, font=c.button)
    
-    buttons['place_order'] = SlotButton(rect=(positions['pull_x'],positions['pull_y'], sizes['mbw'],1.42*sizes['sbh']),\
-    caption="Place Order", fgcolor=c.background_color, bgcolor=PURPLE, font=c.header)
+    buttons['place_order'] = TradingButton(rect=(positions['pull_x'],positions['pull_y'], sizes['mbw'],1.42*sizes['sbh']),\
+    caption="Buy", fgcolor=WHITE, bgcolor=c.background_color, font=c.header)
 
-    buttons['stop'] = SlotButton(rect=(positions['pull_x'],positions['stop_y']+40, sizes['mbw'],1.42*sizes['sbh']),\
-    caption="Stop", fgcolor=c.background_color, bgcolor=RED, font=c.header)
+    buttons['stop'] = TradingButton(rect=(positions['pull_x'],positions['stop_y']+40, sizes['mbw'],1.42*sizes['sbh']),\
+    caption="Sell", fgcolor=WHITE, bgcolor=c.background_color, font=c.header)
 
-    buttons['clear'] = SlotButton(rect=(positions['bet_5_x'],positions['clear_y'], sizes['sbw']+(positions['bet_10_x']-positions['bet_5_x']),sizes['xsbh']),\
-    caption="Clear", fgcolor=c.background_color, bgcolor=BRIGHT_ORANGE, font=c.button)
+    buttons['clear'] = TradingButton(rect=(positions['bet_5_x'],positions['clear_y'], sizes['sbw']+(positions['bet_10_x']-positions['bet_5_x']),sizes['xsbh']),\
+    caption="Clear", fgcolor=WHITE, bgcolor=c.background_color, font=c.button)
 
     c.screen.fill(c.background_color)
 
@@ -198,7 +230,7 @@ def draw_screen(c, positions, buttons, sizes, task):
     all_stocks.remove(task['stock'])
 
     for idx,num in enumerate(all_stocks):
-        buttons['mini_stock_' + str(idx) ] = SlotButton(normal='./images/trading_task_stock' + str(num) + '.png', 
+        buttons['mini_stock_' + str(idx) ] = TradingButton(normal='./images/trading_task_stock' + str(num) + '.png', 
             down='./images/trading_task_stock' + str(num) + '_gray.png',
             highlight='./images/trading_task_stock' + str(num) + '_gray.png', 
             pos1=positions['mini_stocks']['x'], pos2=positions['mini_stocks']['y' + str(idx)])
@@ -213,11 +245,7 @@ def draw_screen(c, positions, buttons, sizes, task):
 
     # Draw main ticker
     c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
-
-    yesterdays_close = task['current_price'][task['stock']][-1]
-    close_price = ticker_font_small.render('Prev. Close: ' + str(yesterdays_close), True, WHITE)
-    c.screen.blit(close_price,(positions['yesterdays_close_x'],positions['yesterdays_close_y']))
-
+    c.screen.blit(scoreboard,(positions['scoreboard_x'],positions['scoreboard_y']))
 
     for key in buttons:
         buttons[key].draw(c.screen)
@@ -247,6 +275,11 @@ def update_account(c,positions, sizes, task):
   #  task['account_balance'] = task['account_balance'] - task['buy_price']*task['trade_size']
     return task
 
+def instruction_screen(c):
+    c.blank_screen()
+    for instruction in instructions:
+        c.button_screen(choice_image=instruction, button_txt="Next", y_offset=-40)
+
 def clear(c,task):
     if len(task['trade_sequence']) > 0:
         if task['trade_size'][task['trial']] > 0:
@@ -274,9 +307,9 @@ def stock_split(c,task, positions, sizes):
     pygame.display.update()
     waitfun(1000)
 
-    gamble_button = SlotButton(rect=(c.left_center_x-sizes['bbw']/2,c.bottom_y+sizes['sbh'], sizes['bbw'],sizes['sbh']),\
+    gamble_button = TradingButton(rect=(c.left_center_x-sizes['bbw']/2,c.bottom_y+sizes['sbh'], sizes['bbw'],sizes['sbh']),\
         caption="Hold",  fgcolor=c.background_color, bgcolor=RED, font=c.button)
-    no_gamble_button = SlotButton(rect=(c.right_center_x-sizes['bbw']/2,c.bottom_y+sizes['sbh'],sizes['bbw'],sizes['sbh']),\
+    no_gamble_button = TradingButton(rect=(c.right_center_x-sizes['bbw']/2,c.bottom_y+sizes['sbh'],sizes['bbw'],sizes['sbh']),\
         caption="No thanks.", fgcolor=c.background_color, bgcolor=GREEN, font=c.button)
 
     decided = False
@@ -355,74 +388,85 @@ def win_screen(c,positions, buttons, sizes, task):
 def show_win_banner(c,positions,reward):
     c.screen.blit(win_banner,(positions['banner_x'],positions['banner_y'])) 
     winsound.play()
-    c.text_screen('You gained ' + str(reward) + '!!', font=c.title, valign='top', y_displacement= -200, wait_time=800)
+    c.text_screen('Earnings report: ' + str(reward) + 'CHF', font=c.title,font_color=GOLD, valign='top', y_displacement= -200, wait_time=1500)
 
 def result(c, positions, buttons, sizes, task):
-    percent_change = [.001,.002,.003,.004,.005,.006,.007,.008,.009,.01]
+    percent_change = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
     wait = 190
 
-    c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
+    c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
+    c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
+    pygame.display.flip()
+    waitfun(wait)
 
-    yesterdays_close = task['current_price'][task['stock']][-1]
+    c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
+    pygame.display.flip()
+    waitfun(wait)
+
+    c.screen.blit(symbols[task['result_sequence'][task['trial']][3]],(positions['ticker']['x3'],positions['ticker']['y']))
+    pygame.display.flip()
+    waitfun(500)
+
+    task['current_price'][task['stock']].append(task['current_price'][task['stock']][-1])
 
     if task['result_sequence'][task['trial']][0] == '1': # win
         task['reward_grade'][task['trial']] = int(task['result_sequence'][task['trial']][2])
         reward = task['trade_size'][task['trial']]*percent_change[task['reward_grade'][task['trial']]]*task['current_price'][task['stock']][-1] 
         task['winloss'][task['trial']] = reward
-        task['current_price'][task['stock']].append(task['current_price'][task['stock']][-1]+reward)
-
-        increment = math.floor(reward)
-        open_price = yesterdays_close+increment
-        op = ticker_font.render('+' + str(open_price), True, TX_GREEN)
-        c.screen.blit(op,(positions['ticker']['x1'],positions['ticker']['y']))
-
-        midday_price = open_price+increment
-        mp = ticker_font.render('+' + str(midday_price), True, TX_GREEN)
-        c.screen.blit(mp,(positions['ticker']['x2'],positions['ticker']['y']))
-
-        close_price = ticker_font.render('+' + str(task['current_price'][task['stock']][-1]), True, TX_GREEN)
-        c.screen.blit(close_price,(positions['ticker']['x3'],positions['ticker']['y']))
-        pygame.display.flip()
-        waitfun(500)
-        #win_screen(c,positions, buttons, sizes, task)
         show_win_banner(c,positions,reward)
+    
+        # increment = math.floor(reward)
+        # open_price = yesterdays_close+increment
+        # op = ticker_font.render('+' + str(open_price), True, TX_GREEN)
+        # c.screen.blit(op,(positions['ticker']['x1'],positions['ticker']['y']))
+
+        # midday_price = open_price+increment
+        # mp = ticker_font.render('+' + str(midday_price), True, TX_GREEN)
+        # c.screen.blit(mp,(positions['ticker']['x2'],positions['ticker']['y']))
+
+        # close_price = ticker_font.render('+' + str(task['current_price'][task['stock']][-1]), True, TX_GREEN)
+        # c.screen.blit(close_price,(positions['ticker']['x3'],positions['ticker']['y']))
+        # pygame.display.flip()
+        # waitfun(500)
+        # win_screen(c,positions, buttons, sizes, task)
+        
 
     elif task['result_sequence'][task['trial']][0] == '2': # near miss
 
-        open_price = yesterdays_close+round(100*random.uniform(0,5))/100
-        op = ticker_font.render('+' + str(open_price), True, TX_GREEN)
-        c.screen.blit(op,(positions['ticker']['x1'],positions['ticker']['y']))
+        # open_price = yesterdays_close+round(100*random.uniform(0,5))/100
+        # op = ticker_font.render('+' + str(open_price), True, TX_GREEN)
+        # c.screen.blit(op,(positions['ticker']['x1'],positions['ticker']['y']))
 
-        midday_price = open_price+round(100*random.uniform(0,5))/100
-        mp = ticker_font.render('+' + str(midday_price), True, TX_GREEN)
-        c.screen.blit(mp,(positions['ticker']['x2'],positions['ticker']['y']))
+        # midday_price = open_price+round(100*random.uniform(0,5))/100
+        # mp = ticker_font.render('+' + str(midday_price), True, TX_GREEN)
+        # c.screen.blit(mp,(positions['ticker']['x2'],positions['ticker']['y']))
 
-        close_price = yesterdays_close-round(100*random.uniform(0,5))/100
-        cp = ticker_font.render(str(close_price), True, TX_RED)
-        c.screen.blit(cp,(positions['ticker']['x3'],positions['ticker']['y']))
-        pygame.display.flip()
-        waitfun(500)
+        # close_price = yesterdays_close-round(100*random.uniform(0,5))/100
+        # cp = ticker_font.render(str(close_price), True, TX_RED)
+        # c.screen.blit(cp,(positions['ticker']['x3'],positions['ticker']['y']))
+        # pygame.display.flip()
+        # waitfun(500)
 
         task['reward_grade'][task['trial']] = 0
-        task['winloss'][task['trial']] = (close_price-yesterdays_close)*task['trade_size'][task['trial']]
+        task['winloss'][task['trial']] = -task['trade_size'][task['trial']]*task['current_price'][task['stock']][-1] 
 
     elif task['result_sequence'][task['trial']][0] == '0': # loss
         task['reward_grade'][task['trial']] = 0
         task['winloss'][task['trial']] = 0
 
-        open_price,px_o,o1 = print_prices_spin(yesterdays_close)
-        c.screen.blit(open_price,(positions['ticker']['x1']+o1,positions['ticker']['y']))
-        midday_price, px_m,o2 = print_prices_spin(px_o)
-        c.screen.blit(midday_price,(positions['ticker']['x2']+o2,positions['ticker']['y']))
+        # open_price,px_o,o1 = print_prices_spin(yesterdays_close)
+        # c.screen.blit(open_price,(positions['ticker']['x1']+o1,positions['ticker']['y']))
+        # midday_price, px_m,o2 = print_prices_spin(px_o)
+        # c.screen.blit(midday_price,(positions['ticker']['x2']+o2,positions['ticker']['y']))
 
-        close_price = yesterdays_close-round(100*random.uniform(0,5))/100
-        cp = ticker_font.render(str(close_price), True, TX_RED)
-        c.screen.blit(cp,(positions['ticker']['x3'],positions['ticker']['y']))
-        pygame.display.flip()
-        waitfun(500)
+        # close_price = yesterdays_close-round(100*random.uniform(0,5))/100
+        # cp = ticker_font.render(str(close_price), True, TX_RED)
+        # c.screen.blit(cp,(positions['ticker']['x3'],positions['ticker']['y']))
+        # pygame.display.flip()
+        # waitfun(500)
 
         task['reward_grade'][task['trial']] = 0
-        task['winloss'][task['trial']] = (close_price-yesterdays_close)*task['trade_size'][task['trial']]
+        task['winloss'][task['trial']] = -task['trade_size'][task['trial']]*task['current_price'][task['stock']][-1]
 
     if int(task['result_sequence'][task['trial']][4]) == 1:
         stock_split(c, task, positions, sizes)
@@ -439,8 +483,8 @@ def display_assets(c,positions,sizes,task):
     bet_banner = money_font.render(str(task['trade_size'][task['trial']]),True,RED) 
     c.surf_center_text(bet_banner, bet_screen_inside,0,0)
 
-    bet_label = c.title.render("Shares",True,RED) 
-    c.screen.blit(bet_label,(positions['bet_screen_x']+5, positions['bet_screen_y']-60))
+    #bet_label = c.title.render("Shares",True,RED) 
+    #c.screen.blit(bet_label,(positions['bet_screen_x']+5, positions['bet_screen_y']-60))
 
     account_screen_inside = pygame.Rect(positions['scoreboard_x']+1,positions['account_screen_y']+1,sizes['bbw']+33, 1.2*sizes['bbh']-2)
     pygame.draw.rect(c.screen,c.background_color,account_screen_inside,0)
@@ -476,10 +520,14 @@ def spin_prices(c,positions,buttons,task):
     yesterdays_close = task['current_price'][task['stock']][-1]
     n = 400
     show1 = True
+    show2 = False
+    show3 = False
     show4 = False
 
+    len_spin = 20
+    width = round(210/len_spin)
     counter = 0
-    while counter < 20:
+    while counter < len_spin:
         if pygame.event.peek([MOUSEBUTTONDOWN,KEYDOWN,MOUSEBUTTONUP,KEYUP]):
             for event in pygame.event.get():
                 if event.type==MOUSEBUTTONDOWN:
@@ -508,25 +556,68 @@ def spin_prices(c,positions,buttons,task):
                     buttons['stop'].draw(c.screen)
                     pygame.display.update()
                     counter = 40
-        else:   
+        else:  
             if 0 < round(time.time()*1000) % n < n/4 and show1:
-                open_price,px_o,o1 = print_prices_spin(yesterdays_close)
-                c.screen.blit(open_price,(positions['ticker']['x1']+o1,positions['ticker']['y']))
-                midday_price, px_m,o2 = print_prices_spin(px_o)
-                c.screen.blit(midday_price,(positions['ticker']['x2']+o2,positions['ticker']['y']))
-                close_price, px_c,o3 = print_prices_spin(px_m)
-                c.screen.blit(close_price,(positions['ticker']['x3']+o3,positions['ticker']['y']))
-                show1 = False
-                show4 = True
+                num1 = random.randint(1,9)
+                c.screen.blit(symbols[str(num1)],(positions['ticker']['x1'],positions['ticker']['y']))
+
+                px_update = pygame.Rect(positions['ticker']['px1']+counter*width-1,positions['ticker']['py']-num1*15,width,num1*15)
+                pygame.draw.rect(c.screen,PX_BLUE,px_update,0)
+
                 pygame.display.flip()
+                show1 = False
+                show2 = True
+            elif n/4 < round(time.time()*1000) % n < n/2 and show2:
+                num2 = random.randint(1,9)
+                c.screen.blit(symbols[str(num2)],(positions['ticker']['x2'],positions['ticker']['y']))
+
+                px_update2 = pygame.Rect(positions['ticker']['px2']+counter*width-1,positions['ticker']['py']-num2*15,width,num2*15)
+                pygame.draw.rect(c.screen,PX_BLUE,px_update2,0)
+
+                pygame.display.flip()
+                show2 = False;
+                show3 = True
+            elif n/2 < round(time.time()*1000) % n < 3*n/4 and show3:
+                num3 = random.randint(1,9)
+                c.screen.blit(symbols[str(num3)],(positions['ticker']['x3'],positions['ticker']['y']))
+           
+                px_update3 = pygame.Rect(positions['ticker']['px3']+counter*width-1,positions['ticker']['py']-num3*15,width,num3*15)
+                pygame.draw.rect(c.screen,PX_BLUE,px_update3,0)
+
+                counter += 1
+
+                pygame.display.flip()
+                show3 = False
+                show4 = True
             elif n-10 < round(time.time()*1000) % n < n and show4:
-                c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
-                yesterdays_close = task['current_price'][task['stock']][-1]
-                close_price = ticker_font_small.render('Prev. Close: ' + str(yesterdays_close), True, WHITE)
-                c.screen.blit(close_price,(positions['yesterdays_close_x'],positions['yesterdays_close_y']))
+                c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
+                #if task['machine'] == 2:
+                #    bet_label = c.title.render("Bet",True,RED) 
+                #    c.screen.blit(bet_label,(positions['bet_screen_x']+5, positions['bet_screen_y']-60))
                 pygame.display.flip()
                 show4 = False
                 show1 = True
-                counter += 1
+
+
+
+            # if 0 < round(time.time()*1000) % n < n/4 and show1:
+            #     open_price,px_o,o1 = print_prices_spin(yesterdays_close)
+            #     c.screen.blit(open_price,(positions['ticker']['x1']+o1,positions['ticker']['y']))
+            #     midday_price, px_m,o2 = print_prices_spin(px_o)
+            #     c.screen.blit(midday_price,(positions['ticker']['x2']+o2,positions['ticker']['y']))
+            #     close_price, px_c,o3 = print_prices_spin(px_m)
+            #     c.screen.blit(close_price,(positions['ticker']['x3']+o3,positions['ticker']['y']))
+            #     show1 = False
+            #     show4 = True
+            #     pygame.display.flip()
+            # elif n-10 < round(time.time()*1000) % n < n and show4:
+            #     c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
+            #     yesterdays_close = task['current_price'][task['stock']][-1]
+            #     close_price = ticker_font_small.render('Prev. Close: ' + str(yesterdays_close), True, WHITE)
+            #     c.screen.blit(close_price,(positions['yesterdays_close_x'],positions['yesterdays_close_y']))
+            #     pygame.display.flip()
+            #     show4 = False
+            #     show1 = True
+            #     counter += 1
 
 

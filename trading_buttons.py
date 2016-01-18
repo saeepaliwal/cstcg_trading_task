@@ -37,6 +37,7 @@ or implied, of Al Sweigart.
 """
 import pygame
 from pygame.locals import *
+import pdb
 #import pygame.font 
 
 pygame.font.init()
@@ -50,7 +51,7 @@ LIGHTGRAY = (212, 208, 200)
 TEAL      = ( 58, 138, 112)
 
 class TradingButton(object):
-    def __init__(self, rect=None, caption='', bgcolor=LIGHTGRAY, fgcolor=WHITE, font=None, normal=None, down=None, highlight=None):
+    def __init__(self, rect=None, caption='', bgcolor=LIGHTGRAY, fgcolor=WHITE, font=None, normal=None, down=None, highlight=None, pos1=None, pos2=None):
         """Create a new button object. Parameters:
             rect - The size and position of the button as a pygame.Rect object
                 or 4-tuple of integers.
@@ -78,9 +79,10 @@ class TradingButton(object):
             surface.
             """
         if rect is None:
-            self._rect = pygame.Rect(0, 0, 30, 60)
+            self._rect = pygame.Rect(pos1, pos2, 30, 60)
         else:
             self._rect = pygame.Rect(rect)
+            self.is_surface = False
 
         self._caption = caption
         self._bgcolor = bgcolor
@@ -126,41 +128,46 @@ class TradingButton(object):
         when mouseUp() or mouseClick() is called. lastMouseDownOverButton is
         always False when mouseUp() or mouseClick() is called."""
 
-        if eventObj.type not in (MOUSEMOTION, MOUSEBUTTONUP, MOUSEBUTTONDOWN) or not self._visible:
+        if eventObj.type not in (MOUSEMOTION, MOUSEBUTTONUP, MOUSEBUTTONDOWN, KEYDOWN, KEYUP) or not self._visible:
             # The button only cares bout mouse-related events (or no events, if it is invisible)
             return []
 
         retVal = []
 
         hasExited = False
-        if not self.mouseOverButton and self._rect.collidepoint(eventObj.pos):
-            # if mouse has entered the button:
-            self.mouseOverButton = True
-            self.mouseEnter(eventObj)
-            retVal.append('enter')
-        elif self.mouseOverButton and not self._rect.collidepoint(eventObj.pos):
-            # if mouse has exited the button:
-            self.mouseOverButton = False
-            hasExited = True # call mouseExit() later, since we want mouseMove() to be handled before mouseExit()
+        if eventObj.type in (MOUSEMOTION, MOUSEBUTTONUP, MOUSEBUTTONDOWN):
+            if not self.mouseOverButton and self._rect.collidepoint(eventObj.pos):
+                # if mouse has entered the button:
+                self.mouseOverButton = True
+                self.mouseEnter(eventObj)
+                retVal.append('enter')
+            elif self.mouseOverButton and not self._rect.collidepoint(eventObj.pos):
+                # if mouse has exited the button:
+                self.mouseOverButton = False
+                hasExited = True # call mouseExit() later, since we want mouseMove() to be handled before mouseExit()
 
-        if self._rect.collidepoint(eventObj.pos):
-            # if mouse event happened over the button:
-            if eventObj.type == MOUSEMOTION:
-                self.mouseMove(eventObj)
-                retVal.append('move')
-            elif eventObj.type == MOUSEBUTTONDOWN:
-                self.buttonDown = True
-                self.lastMouseDownOverButton = True
-                self.mouseDown(eventObj)
-                retVal.append('down')
-        else:
-            if eventObj.type in (MOUSEBUTTONUP, MOUSEBUTTONDOWN):
-                # if an up/down happens off the button, then the next up won't cause mouseClick()
-                self.lastMouseDownOverButton = False
-
+            if self._rect.collidepoint(eventObj.pos):
+                # if mouse event happened over the button:
+                if eventObj.type == MOUSEMOTION:
+                    self.mouseMove(eventObj)
+                    retVal.append('move')
+                elif eventObj.type == MOUSEBUTTONDOWN :
+                    self.buttonDown = True
+                    self.lastMouseDownOverButton = True
+                    self.mouseDown(eventObj)
+                    retVal.append('down')
+            else:
+                if eventObj.type in (MOUSEBUTTONUP, MOUSEBUTTONDOWN):
+                    # if an up/down happens off the button, then the next up won't cause mouseClick()
+                    self.lastMouseDownOverButton = False
+        elif eventObj.type == KEYDOWN:
+            self.buttonDown = True
+            self.lastMouseDownOverButton = True
+            self.mouseDown(eventObj)
+            retVal.append('down')
         # mouse up is handled whether or not it was over the button
         doMouseClick = False
-        if eventObj.type == MOUSEBUTTONUP:
+        if eventObj.type == MOUSEBUTTONUP or eventObj.type == KEYUP:
             if self.lastMouseDownOverButton:
                 doMouseClick = True
             self.lastMouseDownOverButton = False
@@ -203,6 +210,7 @@ class TradingButton(object):
         w = self._rect.width # syntactic sugar
         h = self._rect.height # syntactic sugar
 
+
         # fill background color for all buttons
         self.surfaceNormal.fill(self.bgcolor)
         self.surfaceDown.fill(self.fgcolor)
@@ -215,33 +223,17 @@ class TradingButton(object):
         captionRect.center = int(w / 2), int(h / 2)
         self.surfaceNormal.blit(captionSurf, captionRect)
        
-
         # # draw border for normal button
         pygame.draw.rect(self.surfaceNormal, self.fgcolor, pygame.Rect((0, 0, w, h)), 5) # black border around everything
-        # pygame.draw.rect(self.surfaceNormal, BLACK, pygame.Rect((0, 0, w, h)), 1) # black border around everything
-        # pygame.draw.line(self.surfaceNormal, WHITE, (1, 1), (w - 2, 1))
-        # pygame.draw.line(self.surfaceNormal, WHITE, (1, 1), (1, h - 2))
-        # pygame.draw.line(self.surfaceNormal, DARKGRAY, (1, h - 1), (w - 1, h - 1))
-        # pygame.draw.line(self.surfaceNormal, DARKGRAY, (w - 1, 1), (w - 1, h - 1))
-        # pygame.draw.line(self.surfaceNormal, GRAY, (2, h - 2), (w - 2, h - 2))
-        # pygame.draw.line(self.surfaceNormal, GRAY, (w - 2, 2), (w - 2, h - 2))
 
         # # draw border for down button
         pygame.draw.rect(self.surfaceDown, self.fgcolor, pygame.Rect((0, 0, w, h)), 1)
         self.surfaceDown.blit(captionSurfDown, captionRect)
 
-        # pygame.draw.rect(self.surfaceDown, BLACK, pygame.Rect((0, 0, w, h)), 1) # black border around everything
-        # pygame.draw.line(self.surfaceDown, WHITE, (1, 1), (w - 2, 1))
-        # pygame.draw.line(self.surfaceDown, WHITE, (1, 1), (1, h - 2))
-        # pygame.draw.line(self.surfaceDown, DARKGRAY, (1, h - 2), (1, 1))
-        # pygame.draw.line(self.surfaceDown, DARKGRAY, (1, 1), (w - 2, 1))
-        # pygame.draw.line(self.surfaceDown, GRAY, (2, h - 3), (2, 2))
-        # pygame.draw.line(self.surfaceDown, GRAY, (2, 2), (w - 3, 2))
-
         # draw border for highlight button
         self.surfaceHighlight = self.surfaceNormal
 
-
+       
     def mouseClick(self, event):
         pass # This class is meant to be overridden.
     def mouseEnter(self, event):
@@ -272,6 +264,7 @@ class TradingButton(object):
             self.origSurfaceDown = pygame.image.load(downSurface)
         if type(highlightSurface) == str:
             self.origSurfaceHighlight = pygame.image.load(highlightSurface)
+       
 
         if self.origSurfaceNormal.get_size() != self.origSurfaceDown.get_size() != self.origSurfaceHighlight.get_size():
             raise Exception('foo')
@@ -281,8 +274,7 @@ class TradingButton(object):
         self.surfaceHighlight = self.origSurfaceHighlight
         self.customSurfaces = True
         self._rect = pygame.Rect((self._rect.left, self._rect.top, self.surfaceNormal.get_width(), self.surfaceNormal.get_height()))
-
-
+        self.is_surface = True
 
     def _propGetCaption(self):
         return self._caption

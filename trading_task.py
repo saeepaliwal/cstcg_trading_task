@@ -6,7 +6,7 @@ from pygame.locals import *
 from trading_task_functions import *
 import random
 import numpy as np
-import slot_buttons
+import trading_buttons
 import pdb
 from scipy.io import savemat
 
@@ -14,7 +14,7 @@ from scipy.io import savemat
 # 1. Underlying probability trace
 # 2. 
 
-# Components of the slot machine and equivalent for trading task:
+# Components of th and equivalent for trading task:
 # Bet sizes: buy 20 shares, buy 60 shares
 # Machine Switch: change asset
 # Cashout: New trading day
@@ -43,22 +43,23 @@ GOLD   = ( 254, 195,  13)
 BLACK  = (   0,   0,   0)
 
 
-background_music = pygame.mixer.Sound('./sounds/machine1_music.wav')
-background_music.set_volume(0)
+background_music = pygame.mixer.Sound('./sounds/ticker1_music.wav')
+background_music.set_volume(0.2)
 
 c = ChoiceTask(background_color=BLACK, 
-    title  = pygame.font.Font('./fonts/Lobster.ttf', 60),
+    title  = pygame.font.Font('./fonts/SansSerifFLF.otf', 40),
     body  = pygame.font.Font('./fonts/Oswald-Bold.ttf', 30),
-    header = pygame.font.Font('./fonts/Oswald-Bold.ttf', 40),
+    header = pygame.font.Font('./fonts/SansSerifFLF.otf', 40),
     instruction = pygame.font.Font('./fonts/GenBasR.ttf',30),
     choice_text = pygame.font.Font('./fonts/GenBasR.ttf', 30),
-    button = pygame.font.Font('./fonts/Oswald-Bold.ttf',30))
+    button = pygame.font.Font('./fonts/SansSerifFLF.otf',30))
 
 (subjectname) = c.subject_information_screen()
 subject = subjectname.replace(" ","")
 matlab_output_file = c.create_output_file(subjectname)
 c.blank_screen()
 welcome_screen(c)
+instruction_screen(c)
 
 # Pull in task backend
 with open ('taskBackend_finance_test.txt','r') as f:
@@ -84,10 +85,8 @@ NUM_TRIALS=10
 # or something
 # then the prices show up --yesterday, your trade, sell price.
 
-# Machine switch is switching assets
-
 # Define open prices for the four stocks
-open_prices = [100, 2, 700, 10]
+open_prices = [20, 40, 60, 80]
 
 # Define dictionary of task attributes:
 task = {'trade_size': np.zeros(NUM_TRIALS).astype('int'),
@@ -192,7 +191,7 @@ for trial in range(NUM_TRIALS):
                     task['stock_sequence'][trial] = task['stock']
                     if len(task['current_price'][task['stock']]) == 0:
                         task['current_price'][task['stock']].append(open_prices[task['stock']])
-                    background_music = pygame.mixer.Sound('./sounds/stock' + str(task['stock']) + '_music.wav')
+                    background_music = pygame.mixer.Sound('./sounds/ticker' + str(task['stock']) + '_music.wav')
                     background_music.set_volume(0.2)
                     buttons = draw_screen(c, positions, buttons, sizes, task)
                     background_music.play(100,0)
@@ -205,7 +204,7 @@ for trial in range(NUM_TRIALS):
                     task['stock_sequence'][trial] = task['stock']
                     if len(task['current_price'][task['stock']]) == 0:
                         task['current_price'][task['stock']].append(open_prices[task['stock']])
-                    background_music = pygame.mixer.Sound('./sounds/machine' + str(task['stock']) + '_music.wav')
+                    background_music = pygame.mixer.Sound('./sounds/ticker' + str(task['stock']) + '_music.wav')
                     background_music.set_volume(0.2)
                     buttons = draw_screen(c, positions, buttons, sizes, task)
                     background_music.play(100,0)
@@ -218,7 +217,7 @@ for trial in range(NUM_TRIALS):
                     task['stock_sequence'][trial] = task['stock']
                     if len(task['current_price'][task['stock']]) == 0:
                         task['current_price'][task['stock']].append(open_prices[task['stock']])
-                    background_music = pygame.mixer.Sound('./sounds/stock' + str(task['stock']) + '_music.wav')
+                    background_music = pygame.mixer.Sound('./sounds/ticker' + str(task['stock']) + '_music.wav')
                     background_music.set_volume(0.2)
                     buttons = draw_screen(c, positions, buttons, sizes, task)    
                     background_music.play(100,0)
