@@ -69,13 +69,21 @@ tickers['3'] = pygame.image.load('./images/trading_task_ticker3.png').convert_al
 # Load instructions
 # Load instructions
 instructions = {}
-instructions['1'] = pygame.image.load('./instructions/Slide1.png').convert_alpha()
-instructions['2'] = pygame.image.load('./instructions/Slide2.png').convert_alpha()
-instructions['3'] = pygame.image.load('./instructions/Slide3.png').convert_alpha()
-instructions['4'] = pygame.image.load('./instructions/Slide4.png').convert_alpha()
-instructions['5'] = pygame.image.load('./instructions/Slide5.png').convert_alpha()
-instructions['6'] = pygame.image.load('./instructions/Slide6.png').convert_alpha()
-instructions['7'] = pygame.image.load('./instructions/Slide7.png').convert_alpha()
+instructions['1'] = pygame.image.load('./instructions/Slide01.png').convert_alpha()
+instructions['2'] = pygame.image.load('./instructions/Slide02.png').convert_alpha()
+instructions['3'] = pygame.image.load('./instructions/Slide03.png').convert_alpha()
+instructions['4'] = pygame.image.load('./instructions/Slide04.png').convert_alpha()
+instructions['5'] = pygame.image.load('./instructions/Slide05.png').convert_alpha()
+instructions['6'] = pygame.image.load('./instructions/Slide06.png').convert_alpha()
+instructions['7'] = pygame.image.load('./instructions/Slide07.png').convert_alpha()
+instructions['8'] = pygame.image.load('./instructions/Slide08.png').convert_alpha()
+instructions['9'] = pygame.image.load('./instructions/Slide09.png').convert_alpha()
+instructions['10'] = pygame.image.load('./instructions/Slide10.png').convert_alpha()
+instructions['11'] = pygame.image.load('./instructions/Slide11.png').convert_alpha()
+instructions['12'] = pygame.image.load('./instructions/Slide12.png').convert_alpha()
+instructions['13'] = pygame.image.load('./instructions/Slide13.png').convert_alpha()
+instructions['14'] = pygame.image.load('./instructions/Slide14.png').convert_alpha()
+instructions['15'] = pygame.image.load('./instructions/Slide15.png').convert_alpha()
 
 spin_cover =  pygame.image.load('./images/trading_task_spin_cover.png').convert_alpha()
 
@@ -108,16 +116,16 @@ def is_odd(num):
 
 
 def selector(c,task,positions,index,selector_pos):
-    sel_positions=[(100,445), # loss
-               (8,530), # orange
-               (8,608), # grape 
-               (8,679), # cherry 
-               (8,755), # lemon 
+    sel_positions=[(110,430), # loss
+               (8,500), # orange
+               (8,580), # grape 
+               (8,650), # cherry 
+               (8,730), # lemon 
                (8,800), # plum
-               (180,530), # bar 
-               (180,600), # bell 
-               (180,682), # watermelon
-               (180,755), # seven
+               (180,500), # bar 
+               (180,580), # bell 
+               (180,650),#watermelon
+               (180,730),#seven
                (180,800)] # jackpot
 
     pos = sel_positions[selector_pos-1]
@@ -141,25 +149,25 @@ def welcome_screen(c, wait_time=3000):
     c.attn_screen(attn=intro,wait_time=wait_time)
 
 
-def cashout(c, positions, buttons, sizes, task):   
+# def cashout(c, positions, buttons, sizes, task):   
 
-    c.screen.fill(c.background_color)
-    cashout_or_back = c.title.render("Leave trading floor or go back?", True, GOLD)
-    c.center_text(cashout_or_back,y_offset=-100, center_x=c.center_x, center_y=c.center_y)
+#     c.screen.fill(c.background_color)
+#     cashout_or_back = c.title.render("Leave trading floor or go back?", True, GOLD)
+#     c.center_text(cashout_or_back,y_offset=-100, center_x=c.center_x, center_y=c.center_y)
 
-    button_clicked = c.choice_screen(button_txt1="Leave", button_txt2="Stay")
-    if button_clicked[0] == 'left':
-        c.log('Did not cash out ' + str(task['trial']) +  ' ' + repr(time.time()) + '\n')
-        draw_screen(c, positions, buttons, sizes, task)
-        pygame.display.update()
-    elif button_clicked[0] == 'right':
-        c.log('Cashing out ' + str(task['trial']) +  ' ' + repr(time.time()) + '\n')
-        c.blank_screen()
-        c.text_screen('Leaving the trading floor!', font=c.title, font_color=GOLD, valign='top', y_displacement= -45, wait_time=3000)  
-        c.blank_screen()
-        c.text_screen('Entering the market on a new day!', font=c.title, font_color=GOLD, valign='top', y_displacement= -45, wait_time=3000)  
-        welcome_screen(c) 
-        c.blank_screen()
+#     button_clicked = c.choice_screen(button_txt1="Leave", button_txt2="Stay")
+#     if button_clicked[0] == 'left':
+#         c.log('Did not cash out ' + str(task['trial']) +  ' ' + repr(time.time()) + '\n')
+#         draw_screen(c, positions, buttons, sizes, task)
+#         pygame.display.update()
+#     elif button_clicked[0] == 'right':
+#         c.log('Cashing out ' + str(task['trial']) +  ' ' + repr(time.time()) + '\n')
+#         c.blank_screen()
+#         c.text_screen('Leaving the trading floor!', font=c.title, font_color=GOLD, valign='top', y_displacement= -45, wait_time=3000)  
+#         c.blank_screen()
+#         c.text_screen('Entering the market on a new day!', font=c.title, font_color=GOLD, valign='top', y_displacement= -45, wait_time=3000)  
+#         welcome_screen(c) 
+#         c.blank_screen()
     
 
 def get_screen_elements(c, task):
@@ -213,10 +221,9 @@ def get_screen_elements(c, task):
     
     positions['bet_screen_x'] = positions['bet_5_x']
     positions['bet_screen_y'] = positions['pull_y']
+    #positions['account_screen_y'] = c.top_y+0.1*sizes['sh']
 
-    positions['scoreboard_x'] = 20
-    positions['scoreboard_y'] = c.bottom_y - 100
-    positions['account_screen_y'] = c.top_y+0.1*sizes['sh']
+    positions['account_screen_y'] = c.top_y
 
     positions['yesterdays_close_x'] = c.center_x+80
     positions['yesterdays_close_y'] = 190
@@ -312,7 +319,7 @@ def end_training_screen(c):
     waitfun(1000)
     c.log('Training end at ' + repr(time.time()) + '\n')
     c.blank_screen()
-    c.text_screen('Training is complete. The game will begin now! Good luck!', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
+    c.text_screen('Das Training ist fertig. Das Spiel beginnt jetzt! Viel Glueck!', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
 
 
 def draw_screen(c, positions, buttons, sizes, task):
@@ -377,12 +384,12 @@ def update_account(c,positions, sizes, task):
 def instruction_screen(c,positions,sizes,RTB):
 
     back_button = TradingButton(rect=(positions['gamble_x'],positions['gamble_y'], sizes['bbw'],sizes['sbh']),\
-        caption="Back",  fgcolor=c.background_color, bgcolor=RED, font=c.button)
+        caption="Zurueck",  fgcolor=c.background_color, bgcolor=RED, font=c.button)
     next_button = TradingButton(rect=(positions['no_gamble_x'],positions['no_gamble_y'],sizes['bbw'],sizes['sbh']),\
-        caption="Next", fgcolor=c.background_color, bgcolor=GREEN, font=c.button)
+        caption="Weiter", fgcolor=c.background_color, bgcolor=GREEN, font=c.button)
 
     finish_button = TradingButton(rect=(positions['no_gamble_x'],positions['no_gamble_y'],sizes['bbw'],sizes['sbh']),\
-        caption="Finish", fgcolor=c.background_color, bgcolor=GREEN, font=c.button)
+        caption="Fertig", fgcolor=c.background_color, bgcolor=GREEN, font=c.button)
 
     counter = 1
     c.blank_screen()
@@ -444,16 +451,16 @@ def stock_split(c,task, positions, sizes,RTB):
     
    
     c.screen.blit(card_back,(x_pos,y_pos))
-    c.make_banner(split_font.render("Hold position to see if your stock splits?", True, BLACK))
+    c.make_banner(split_font.render("Doppelt oder nichts?", True, BLACK))
     c.screen.blit(split_font.render("?",True,BLACK),(fpos_x,fpos_y))
     eeg_trigger(c,task,'gamble_screen')
     #pygame.display.update()
     #waitfun(1000)
 
     gamble_button = TradingButton(rect=(positions['gamble_x'],positions['gamble_y'], sizes['bbw'],sizes['sbh']),\
-        caption="Hold",  fgcolor=c.background_color, bgcolor=RED, font=c.button)
+        caption="Halten",  fgcolor=c.background_color, bgcolor=RED, font=c.button)
     no_gamble_button = TradingButton(rect=(positions['no_gamble_x'],positions['no_gamble_y'],sizes['bbw'],sizes['sbh']),\
-        caption="No thanks.", fgcolor=c.background_color, bgcolor=GREEN, font=c.button)
+        caption="Nein danke.", fgcolor=c.background_color, bgcolor=GREEN, font=c.button)
 
     decided = False
     CARD = pygame.USEREVENT + 1
@@ -462,7 +469,7 @@ def stock_split(c,task, positions, sizes,RTB):
     start_time = time.time()
     c.screen.blit(card_back,(x_pos,y_pos))
     c.screen.blit(split_font.render("3",True,BLACK),(fpos_x,fpos_y))
-    c.make_banner(split_font.render("Hold position to see if your stock splits?", True, BLACK))
+    c.make_banner(split_font.render("Doppelt oder nichts?", True, BLACK))
     gamble_button.draw(c.screen)
     no_gamble_button.draw(c.screen)
     pygame.display.update()
@@ -511,7 +518,7 @@ def stock_split(c,task, positions, sizes,RTB):
             elif event.type == CARD:
                 c.screen.blit(card_back,(x_pos,y_pos))
                 c.screen.blit(split_font.render(str(3-time_elapsed),True,BLACK),(fpos_x,fpos_y))
-                c.make_banner(split_font.render("Hold position to see if your stock splits?", True, BLACK))
+                c.make_banner(split_font.render("Doppelt oder nichts?", True, BLACK))
                 pygame.display.flip()
 
             gamble_button.draw(c.screen)
@@ -552,9 +559,9 @@ def win_screen(c,positions, buttons, sizes, task):
     draw_screen(c, positions, buttons, sizes, task)
 
 def show_win_banner(c,positions,reward):
-    c.screen.blit(win_banner,(positions['banner_x'],positions['banner_y'])) 
+    c.screen.blit(win_banner,(positions['banner_x']+100,positions['banner_y']+70)) 
     #winsound.play()
-    c.text_screen('Earnings report: ' + str(reward) + 'points', font=c.title,font_color=GOLD, valign='top', y_displacement= -200, wait_time=1500)
+    c.text_screen('Gewinnbericht: ' + str(reward) + 'points', font=c.title,font_color=GOLD, valign='top', y_displacement= -200, wait_time=1500)
 
 def show_result(c,positions,buttons,task, spinning=False):
     percent_change = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
@@ -625,7 +632,7 @@ def change_machine_screen(c):
     waitfun(1000)
     c.log('Changing machines at ' + repr(time.time()) + '\n')
     c.blank_screen()
-    c.text_screen('Well done! Now onto a new stock!', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
+    c.text_screen('Gut gemacht! Jetzt geht es weiter auf der naechsten strukturiertes Produkt!', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
 
 
 def process_result(c,positions,buttons,sizes,task, RTB):
@@ -674,68 +681,68 @@ def make_buttons(c,positions,sizes,task,trial_stage):
 
     if trial_stage == 'guess':
         buttons['add_five'] = TradingButton(rect=(positions['bet_5_x'],positions['bet_5_y'], sizes['sbw'],sizes['sbh']),\
-        caption="Add shares", fgcolor=GRAY, bgcolor=c.background_color, font=c.button,highlight=YELLOW)
+        caption="Anteile +", fgcolor=GRAY, bgcolor=c.background_color, font=c.button,highlight=YELLOW)
 
         buttons['place_order'] = TradingButton(rect=(positions['pull_x'],positions['pull_y'], sizes['mbw'],sizes['bbh']),\
-        caption="Buy", fgcolor=GRAY, bgcolor=c.background_color, font=c.header)
+        caption="Kaufen", fgcolor=GRAY, bgcolor=c.background_color, font=c.header)
 
         buttons['clear'] = TradingButton(rect=(positions['bet_10_x'],positions['bet_10_y'], sizes['sbw'],sizes['sbh']),\
-        caption="Clear", fgcolor=GRAY, bgcolor=c.background_color, font=c.button)
+        caption="Anteile -", fgcolor=GRAY, bgcolor=c.background_color, font=c.button)
 
         if task['wheel_hold_buttons']:
             buttons['hold1'] = TradingButton(rect=(positions['hold1_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-            caption="Stop", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
+            caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
 
             buttons['hold2'] = TradingButton(rect=(positions['hold2_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-            caption="Stop", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
+            caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
             
             buttons['hold3'] = TradingButton(rect=(positions['hold3_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-            caption="Stop", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
+            caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
     elif trial_stage == 'pull' or trial_stage == 'result': 
         buttons['add_five'] = TradingButton(rect=(positions['bet_5_x'],positions['bet_5_y'], sizes['sbw'],sizes['sbh']),\
-        caption="Add shares", fgcolor=GRAY, bgcolor=c.background_color, font=c.button,highlight=YELLOW)
+        caption="Anteile +", fgcolor=GRAY, bgcolor=c.background_color, font=c.button,highlight=YELLOW)
 
         buttons['place_order'] = TradingButton(rect=(positions['pull_x'],positions['pull_y'], sizes['mbw'],sizes['bbh']),\
-        caption="Buy", fgcolor=GRAY, bgcolor=c.background_color, font=c.header)
+        caption="Kaufen", fgcolor=GRAY, bgcolor=c.background_color, font=c.header)
 
         buttons['clear'] = TradingButton(rect=(positions['bet_10_x'],positions['bet_10_y'], sizes['sbw'],sizes['sbh']),\
-        caption="Clear", fgcolor=GRAY, bgcolor=c.background_color, font=c.button)
+        caption="Anteile -", fgcolor=GRAY, bgcolor=c.background_color, font=c.button)
 
         if task['wheel_hold_buttons']:
             buttons['hold1'] = TradingButton(rect=(positions['hold1_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-            caption="Stop", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
+            caption="Verkaufen", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
             if task['ungrey_wheel2']:
                 buttons['hold2'] = TradingButton(rect=(positions['hold2_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-                caption="Stop", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
+                caption="Verkaufen", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
             else:
                 buttons['hold2'] = TradingButton(rect=(positions['hold2_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-                caption="Stop", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
+                caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
 
             if task['ungrey_wheel3']:     
                 buttons['hold3'] = TradingButton(rect=(positions['hold3_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-                caption="Stop", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
+                caption="Verkaufen", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
             else:
                 buttons['hold3'] = TradingButton(rect=(positions['hold3_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-                caption="Stop", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
+                caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
     elif trial_stage == 'bet' or trial_stage == 'clear':
         buttons['add_five'] = TradingButton(rect=(positions['bet_5_x'],positions['bet_5_y'], sizes['sbw'],sizes['sbh']),\
-        caption="Add shares", fgcolor=WHITE, bgcolor=c.background_color, font=c.button,highlight=YELLOW)
+        caption="Anteile +", fgcolor=WHITE, bgcolor=c.background_color, font=c.button,highlight=YELLOW)
 
         buttons['place_order'] = TradingButton(rect=(positions['pull_x'],positions['pull_y'], sizes['mbw'],sizes['bbh']),\
-        caption="Buy", fgcolor=WHITE, bgcolor=c.background_color, font=c.header)
+        caption="Kaufen", fgcolor=WHITE, bgcolor=c.background_color, font=c.header)
 
         buttons['clear'] = TradingButton(rect=(positions['bet_10_x'],positions['bet_10_y'], sizes['sbw'],sizes['sbh']),\
-        caption="Clear", fgcolor=WHITE, bgcolor=c.background_color, font=c.button)
+        caption="Anteile -", fgcolor=WHITE, bgcolor=c.background_color, font=c.button)
 
         if task['wheel_hold_buttons']:
             buttons['hold1'] = TradingButton(rect=(positions['hold1_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-            caption="Stop", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
+            caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
 
             buttons['hold2'] = TradingButton(rect=(positions['hold2_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-            caption="Stop", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
+            caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
             
             buttons['hold3'] = TradingButton(rect=(positions['hold3_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-            caption="Stop", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
+            caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
       
     return buttons
 
@@ -750,7 +757,7 @@ def display_assets(c,positions,sizes,task):
     account_screen_inside = pygame.Rect(positions['scoreboard_x']+1,positions['account_screen_y']+1,sizes['bbw']+33, 1.2*sizes['bbh']-2)
     pygame.draw.rect(c.screen,c.background_color,account_screen_inside,0)
 
-    account_banner = c.header.render("Account Balance:",True,GOLD) 
+    account_banner = c.header.render("Kontostand:",True,GOLD) 
     c.screen.blit(account_banner, (positions['scoreboard_x'] + 10,positions['account_screen_y'] + 10))
     
     account_balance = money_font.render(str(task['account'][task['trial']]), True, RED)
@@ -1025,7 +1032,7 @@ def begin_training_screen(c):
     c.blank_screen()
     c.log('Training beginning at ' + repr(time.time()) + '\n')
 
-    c.text_screen('The next 20 trials are training trials. They will not count towards your final score.', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
+    c.text_screen('Die naechsten 20 Spiele sind zum Ueben da. Die Punkte zaehlen nicht zu ihrem Endergebnis dazu.', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
 
 
 def eeg_trigger(c,task,stage):

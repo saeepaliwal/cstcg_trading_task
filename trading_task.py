@@ -7,13 +7,11 @@ from trading_task_functions import *
 import random
 import numpy as np
 import trading_buttons
-import pdb
 from scipy.io import savemat
 import platform
 
-testing = True
-
-training = False
+testing = False
+training = True
 
 response_box = True
 currency = 'points'
@@ -70,29 +68,29 @@ control_seq = []
 
 # Define open prices for the four stocks
 open_prices = [20, 40, 60, 80]
+if training:
+    # Pull in training trials:
+    with open ('./traces/taskBackend_training.txt','r') as f:
+            probability_trace = f.read().replace('\n', '')
+    result_sequence = probability_trace.split(',')
+else:
+    # Randomize blocks for real trials
+    block_order = [1,2,3,4]
+    random.shuffle(block_order)
 
-# Pull in training trials:
-with open ('./traces/taskBackend_training.txt','r') as f:
-        probability_trace = f.read().replace('\n', '')
-result_sequence = probability_trace.split(',')
-
-# Randomize blocks for real trials
-block_order = [1,2,3,4]
-random.shuffle(block_order)
-
-for b in block_order:
-    with open ('./traces/taskBackend_' + str(b) + '.txt','r') as f:
-        probability_trace = f.read().replace('\n', '')
-    block_sequence = probability_trace.split(',')
-    if block_sequence[0] == 'CONTROL':
-        wheel_hold_bool.append(True)
-        control_seq.append(1)
-    elif block_sequence[0] == 'NOCONTROL':
-        wheel_hold_bool.append(False)
-        control_seq.append(0)
-    block_sequence = block_sequence[1:]
-    result_sequence = result_sequence + block_sequence
-    print "Block sequence: " + str(b)
+    for b in block_order:
+        with open ('./traces/taskBackend_' + str(b) + '.txt','r') as f:
+            probability_trace = f.read().replace('\n', '')
+        block_sequence = probability_trace.split(',')
+        if block_sequence[0] == 'CONTROL':
+            wheel_hold_bool.append(True)
+            control_seq.append(1)
+        elif block_sequence[0] == 'NOCONTROL':
+            wheel_hold_bool.append(False)
+            control_seq.append(0)
+        block_sequence = block_sequence[1:]
+        result_sequence = result_sequence + block_sequence
+        print "Block sequence: " + str(b)
 
 # Set trial switch specifications
 if testing:
@@ -140,7 +138,7 @@ if training:
     task['training'] = True
     START_TRIAL = 0
     task['account'][START_TRIAL] = 500
-    task['current_price'][START_TRIAL] = open_prices[1]
+    
 else:
     task['training'] = False
     START_TRIAL = 20
@@ -159,13 +157,15 @@ for trial in range(START_TRIAL,NUM_TRIALS):
     print trial
     if trial == 0:
         begin_training_screen(c)
-        background_music.play(100,0)
+        background_music[0].play(100,0)
     if trial < task_block_sequence[0]:
         task['stock'] = 0
         task['wheel_hold_buttons'] = wheel_hold_bool[0]
+        task['current_price'][START_TRIAL] = open_prices[task['stock']]
     elif task_block_sequence[0] <= trial < task_block_sequence[1]:
         task['stock'] = 1
         task['wheel_hold_buttons'] = wheel_hold_bool[1]
+        task['current_price'][START_TRIAL] = open_prices[task['stock']]
     elif trial == task_block_sequence[1]:
         if training:
             task['training'] = False
@@ -177,7 +177,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
         task['stock'] = block_order[0]-1
         task['current_block'] = block_order[0]
         task['wheel_hold_buttons'] = wheel_hold_bool[2]
-        #welcome_screen(c)
+        welcome_screen(c)
         background_music[0].play(100,0)
         c.log('Starting block ' + str(block_order[0]) + ' at ' + repr(time.time()) + '\n')
         c.log('Stock ' + str(task['stock']) + 'at ' + repr(time.time()) + '\n')
@@ -186,6 +186,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
         background_music[0].stop()
         change_machine_screen(c)
         task['stock'] = block_order[1]-1
+        task['account'][trial] = 2000
         task['current_block'] = block_order[1]
         task['wheel_hold_buttons'] = wheel_hold_bool[3]
         c.log('Starting block ' + str(block_order[1]) + ' at ' + repr(time.time()) + '\n')
@@ -196,6 +197,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
         background_music[1].stop()
         change_machine_screen(c)
         task['stock'] = block_order[2]-1
+        task['account'][trial] = 2000
         task['current_block'] = block_order[2]
         task['wheel_hold_buttons'] = wheel_hold_bool[4]
         c.log('Starting block ' + str(block_order[2]) + ' at ' + repr(time.time()) + '\n')
@@ -206,6 +208,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
         background_music[2].stop()
         change_machine_screen(c)
         task['stock'] = block_order[3]-1
+        task['account'][trial] = 2000
         task['current_block'] = block_order[3]
         task['wheel_hold_buttons'] = wheel_hold_bool[5]
         c.log('Starting block ' + str(block_order[3]) + ' at ' + repr(time.time()) + '\n')
@@ -238,7 +241,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
 
     # EEG: Guess on
     eeg_trigger(c,task,'guess_on')
-
+    pygame.event.clear()
     while not next_trial:   
         pygame.time.wait(20)
 
@@ -313,5 +316,5 @@ for trial in range(START_TRIAL,NUM_TRIALS):
   
 savemat(matlab_output_file,task)    
 background_music[3].stop()  
-c.exit_screen("That ends the game! Thank you so much for playing! Goodbye!", font=c.title, font_color=GOLD)
+c.exit_screen("Das Trading Spiel fertig. Vielen Dank, dass Sie mitgemacht haben!", font=c.title, font_color=GOLD)
 

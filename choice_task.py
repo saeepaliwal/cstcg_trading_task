@@ -13,7 +13,6 @@ import numpy
 import random 
 import sys
 pygame.init()
-import pdb
 from time import strftime,localtime
 from pygame import gfxdraw
 
@@ -25,7 +24,9 @@ class ChoiceTask():
     screen_height = screen.get_height()
     # screen_width = 900
     # screen_height = 600
-    screen = pygame.display.set_mode((screen_width,screen_height))
+
+    modes = pygame.display.list_modes()
+    screen = pygame.display.set_mode(modes[0],pygame.FULLSCREEN,16)
 
     center_x = screen_width/2
     left_x = screen_width/20
