@@ -10,8 +10,8 @@ import trading_buttons
 from scipy.io import savemat
 import platform
 
-testing = False
-training = True
+testing = True
+training = False
 
 response_box = True
 currency = 'points'
@@ -48,6 +48,7 @@ background_music.append(pygame.mixer.Sound('./sounds/ticker2_music.wav'))
 for i in range(4):
     background_music[i].set_volume(0.1)
 
+pygame.mouse.set_visible(False)
 c = ChoiceTask(background_color=BLACK, 
     title  = pygame.font.Font('./fonts/SansSerifFLF.otf', 40),
     body  = pygame.font.Font('./fonts/Oswald-Bold.ttf', 30),
@@ -230,7 +231,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
 
     if trial > 0 and training:
         task['account'][trial] = task['account'][trial-1] 
-    elif trial > 20 and not training:
+    elif trial > 20 and not training and trial not in task_block_sequence:
         task['account'][trial] = task['account'][trial-1] 
 
     task['reward_grade'][trial] = int(str(result_sequence[trial])[1])
@@ -238,7 +239,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
     buttons, task = draw_screen(c, positions, buttons, sizes, task)
     selector_pos, selected = selector(c,task,positions,0,selector_pos)
 
-
+    eeg_trigger(c,task,'trial')
     # EEG: Guess on
     eeg_trigger(c,task,'guess_on')
     pygame.event.clear()

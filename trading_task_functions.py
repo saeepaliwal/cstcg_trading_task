@@ -10,6 +10,7 @@ import time
 import random
 import serial
 import platform
+from psychopy import core
 
 if platform.system() == 'Windows': # Windows
     from ctypes import windll
@@ -260,7 +261,7 @@ def get_screen_elements(c, task):
 
     return positions, buttons, sizes
 
-def process_rtb(positions,index, stage, hold_on):
+def process_rtb(positions,index, stage, hold_on,task=None):
     fix = 50
     events = []
     event_set = False
@@ -294,14 +295,15 @@ def process_rtb(positions,index, stage, hold_on):
              #   event_set = True
         elif stage == 'pull' and hold_on:
             if index == 1:
-                event1.pos = (positions['hold1_x']+fix, positions['hold_y']+fix)
-                event_set = True
-            elif index == 2:
-                event1.pos = (positions['hold2_x']+fix, positions['hold_y']+fix)
-                event_set = True
-            elif index == 4:
-                event1.pos = (positions['hold3_x']+fix, positions['hold_y']+fix)
-                event_set = True
+                if not task['wheel1'] and not task['wheel2'] and not task['wheel3']:
+                    event1.pos = (positions['hold1_x']+fix, positions['hold_y']+fix)
+                    event_set = True
+                elif task['wheel1'] and not task['wheel2'] and not task['wheel3']:
+                    event1.pos = (positions['hold2_x']+fix, positions['hold_y']+fix)
+                    event_set = True
+                elif task['wheel2'] and task['wheel2'] and not task['wheel3']:
+                    event1.pos = (positions['hold3_x']+fix, positions['hold_y']+fix)
+                    event_set = True
         elif stage == 'gamble':
             if index == 1:
                 event1.pos = (positions['gamble_x'],positions['gamble_y'])
@@ -528,7 +530,7 @@ def stock_split(c,task, positions, sizes,RTB):
 
 def win_screen(c,positions, buttons, sizes, task):
     counter = 0
-
+    percent_change = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
     if task['reward_grade'][task['trial']] < 8:
         numsparkle = 1  
         winnerblit = small_win
@@ -550,7 +552,9 @@ def win_screen(c,positions, buttons, sizes, task):
                 eeg_trigger(c,task,'win_screen_auto')
         else:
             eeg_trigger(c,task,'win_screen_norm')
-        c.screen.blit(pygame.transform.scale(winnerblit, (c.screen_width, c.screen_height)),(10,10))
+        c.screen.blit(win_banner,(positions['banner_x']+100,positions['banner_y']+70)) 
+        c.text_screen('Gewinnprozent: ' + str(percent_change[task['reward_grade'][task['trial']]]*100) + '%', font=c.title,font_color=GOLD, valign='top', y_displacement= -200, wait_time=1500)
+       # c.screen.blit(pygame.transform.scale(winnerblit, (c.screen_width, c.screen_height)),(10,10))
         pygame.display.update()
         waitfun(task['win_screen_interval'])
         #draw_screen(c, positions, buttons, sizes, task)
@@ -661,10 +665,13 @@ def process_result(c,positions,buttons,sizes,task, RTB):
 
     if task['result_sequence'][task['trial']][0] == '1':
         if task['guess_trace'][task['trial']] == int(task['result_sequence'][task['trial']][2]):
-            reward = reward + 50
+            reward = reward + 200
             task['winloss'][task['trial']] = reward
     elif task['result_sequence'][task['trial']][0] == '0' and task['guess_trace'][task['trial']] == 1:
-        reward = reward + 50
+        reward = reward + 200
+        task['winloss'][task['trial']] = reward
+    else:
+        reward = reward - 200
         task['winloss'][task['trial']] = reward
 
     if int(task['result_sequence'][task['trial']][4]) == 1:
@@ -790,7 +797,7 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
     show3 = False
     show4 = False
 
-    len_spin = 20
+    len_spin = 40
     width = round(210/len_spin)
 
     task['wheel1'] = False
@@ -809,7 +816,7 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
         if len(key_press):
             key_index = ord(key_press)
 
-            events = process_rtb(positions,key_index, 'pull', task['wheel_hold_buttons'])
+            events = process_rtb(positions,key_index, 'pull', task['wheel_hold_buttons'], task)
             if len(events) > 0:
                 pygame.event.post(events[0])
                 pygame.event.post(events[1])
@@ -831,49 +838,32 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                         pygame.display.update()
                     elif event.type==MOUSEBUTTONUP:
                         if 'click' in buttons['hold1'].handleEvent(event):
-                            c.press_sound.play()
+                            task['wheel1'] = True
+                            #c.press_sound.play()
+                            c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
+                            show_result(c,positions,buttons,task,spinning=True)
                             buttons['hold1'].draw(c.screen)
                             pygame.display.update()
-                            task['wheel1'] = True
-     
-                            if task['wheel2'] and task['wheel3']:
-                                buttons['place_order'].handleEvent(event)
-                                buttons['place_order'].draw(c.screen)
-                                c.wait_fun(100)                  
-                                c.screen.blit(tickers[str(task['ticker'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))      
-                                show_result(c,positions,buttons,task,spinning=True)
-                                pygame.display.update()
-                                counter = len_spin
+                            
                         if task['ungrey_wheel2']:
                             if 'click' in buttons['hold2'].handleEvent(event):
-                                c.press_sound.play()
-                                buttons['hold2'].draw(c.screen)
-                                pygame.display.update()
                                 task['wheel2'] = True
+                                #c.press_sound.play()
+                                c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
+                                show_result(c,positions,buttons,task, spinning=True)
+                                buttons['hold2'].draw(c.screen)                                
+                                pygame.display.update()
 
-                                if task['wheel1'] and task['wheel3']:
-                                    buttons['place_order'].handleEvent(event)
-                                    buttons['place_order'].draw(c.screen)           
-                                    c.wait_fun(100)
-                                    c.screen.blit(tickers[str(task['ticker'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
-                                    show_result(c,positions,buttons,task, spinning=True)
-                                    pygame.display.update()
-                                    counter = len_spin
                         if task['ungrey_wheel3']:
                             if 'click' in buttons['hold3'].handleEvent(event):
-                                c.press_sound.play()
+                                task['wheel3'] = True
+                                #c.press_sound.play()
+                                c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
+                                show_result(c,positions,buttons,task, spinning=True)
                                 buttons['hold3'].draw(c.screen)
                                 pygame.display.update()
-                                task['wheel3'] = True
-
-                                if task['wheel1'] and task['wheel2']:
-                                    buttons['place_order'].handleEvent(event)
-                                    buttons['place_order'].draw(c.screen)
-                                    c.wait_fun(100)
-                                    c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
-                                    show_result(c,positions,buttons,task, spinning=True)
-                                    pygame.display.update()
-                                    counter = len_spin
+                                counter = len_spin
+                                                                        
         else:
             if 0 < round(time.time()*1000) % n < n/4 and show1:
                 num1 = random.randint(1,9)
