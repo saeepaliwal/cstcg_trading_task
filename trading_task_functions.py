@@ -86,6 +86,16 @@ instructions['13'] = pygame.image.load('./instructions/Slide13.png').convert_alp
 instructions['14'] = pygame.image.load('./instructions/Slide14.png').convert_alpha()
 instructions['15'] = pygame.image.load('./instructions/Slide15.png').convert_alpha()
 
+
+# Load training 
+training_info = {}
+training_info['1'] = pygame.image.load('./images/train_1.png').convert_alpha()
+training_info['2'] = pygame.image.load('./images/train_2.png').convert_alpha()
+training_info['3'] = pygame.image.load('./images/train_3.png').convert_alpha()
+training_info['4'] = pygame.image.load('./images/train_4.png').convert_alpha()
+training_info['5'] = pygame.image.load('./images/train_5.png').convert_alpha()
+
+
 spin_cover =  pygame.image.load('./images/trading_task_spin_cover.png').convert_alpha()
 
 win_banner = pygame.image.load('./images/trading_task_banner.png').convert_alpha()
@@ -115,19 +125,35 @@ def logit(x):
 def is_odd(num):
     return num & 0x1
 
+def show_instruction(c,stage):
+    c.screen.blit(training_info[stage],(c.center_x-training_info[stage].get_width()/2, c.center_y-training_info[stage].get_height()/2))
+    pygame.display.update()
+    c.wait_fun(2000)
 
 def selector(c,task,positions,index,selector_pos):
-    sel_positions=[(110,430), # loss
-               (8,500), # orange
-               (8,580), # grape 
-               (8,650), # cherry 
-               (8,730), # lemon 
-               (8,800), # plum
-               (180,500), # bar 
-               (180,580), # bell 
-               (180,650),#watermelon
-               (180,730),#seven
-               (180,800)] # jackpot
+    # sel_positions=[(110,430), # loss
+    #            (8,500), # orange
+    #            (8,580), # grape 
+    #            (8,650), # cherry 
+    #            (8,730), # lemon 
+    #            (8,800), # plum
+    #            (180,500), # bar 
+    #            (180,580), # bell 
+    #            (180,650),#watermelon
+    #            (180,730),#seven
+    #            (180,800)] # jackpot
+
+    sel_positions=[(110,360), # loss
+           (8,430), # orange
+           (8,510), # grape 
+           (8,580), # cherry 
+           (8,660), # lemon 
+           (8,730), # plum
+           (180,430), # bar 
+           (180,510), # bell 
+           (180,580),#watermelon
+           (180,660),#seven
+           (180,730)] # jackpot
 
     pos = sel_positions[selector_pos-1]
     selected = False
@@ -139,8 +165,12 @@ def selector(c,task,positions,index,selector_pos):
     elif index == 8:
         selected = True
         c.log('Selected guess on Trial ' + str(task['trial']) +  ' ' + repr(time.time()) + '\n')
+        if task['training']:
+            show_instruction(c,'2')
+            show_instruction(c,'3')
     c.screen.blit(selector_box,pos)
     pygame.display.update()
+
     return selector_pos, selected
 
     
@@ -453,7 +483,7 @@ def stock_split(c,task, positions, sizes,RTB):
     
    
     c.screen.blit(card_back,(x_pos,y_pos))
-    c.make_banner(split_font.render("Doppelt oder nichts?", True, BLACK))
+    c.make_banner(split_font.render("Aktiensplit", True, BLACK))
     c.screen.blit(split_font.render("?",True,BLACK),(fpos_x,fpos_y))
     eeg_trigger(c,task,'gamble_screen')
     #pygame.display.update()
@@ -475,6 +505,19 @@ def stock_split(c,task, positions, sizes,RTB):
     gamble_button.draw(c.screen)
     no_gamble_button.draw(c.screen)
     pygame.display.update()
+
+    if task['training']:
+        show_instruction(c,'5')
+    c.screen.fill(WHITE)
+    c.screen.blit(card_back,(x_pos,y_pos))
+    c.screen.blit(split_font.render("3",True,BLACK),(fpos_x,fpos_y))
+    c.make_banner(split_font.render("Doppelt oder nichts?", True, BLACK))
+    gamble_button.draw(c.screen)
+    no_gamble_button.draw(c.screen)
+    pygame.display.update()
+
+
+
 
     while not decided and time_elapsed < 3:
         time_elapsed = int(round(time.time()-start_time))

@@ -96,10 +96,10 @@ else:
 # Set trial switch specifications
 if testing:
     NUM_TRIALS = 30
-    task_block_sequence=[10,20,22,24,26,28]
+    task_block_sequence=[3,6,9,12,15,18]
 else:     
     NUM_TRIALS = len(result_sequence)-1
-    task_block_sequence=[10,20,50,80,110,140]
+    task_block_sequence=[3,6,36,66,96,126]
 
 
 # Define dictionary of task attributes:
@@ -142,7 +142,7 @@ if training:
     
 else:
     task['training'] = False
-    START_TRIAL = 20
+    START_TRIAL = task_block_sequence[1]
     task['account'][START_TRIAL] = 2000
 
 # Set up initial screen 
@@ -231,26 +231,32 @@ for trial in range(START_TRIAL,NUM_TRIALS):
 
     if trial > 0 and training:
         task['account'][trial] = task['account'][trial-1] 
-    elif trial > 20 and not training and trial not in task_block_sequence:
+    elif trial > task_block_sequence[1] and not training and trial not in task_block_sequence:
         task['account'][trial] = task['account'][trial-1] 
 
     task['reward_grade'][trial] = int(str(result_sequence[trial])[1])
 
     buttons, task = draw_screen(c, positions, buttons, sizes, task)
+    if task['training']:
+        show_instruction(c,'1')
+        draw_screen(c, positions, buttons, sizes, task)
     selector_pos, selected = selector(c,task,positions,0,selector_pos)
 
     eeg_trigger(c,task,'trial')
     # EEG: Guess on
     eeg_trigger(c,task,'guess_on')
     pygame.event.clear()
+    RTB.reset_input_buffer()
     while not next_trial:   
         pygame.time.wait(20)
-
+        pygame.event.clear()
         key_press = RTB.read() 
         if len(key_press):
+            RTB.reset_input_buffer()
             key_index = ord(key_press)
 
             if task['trial_stage'] == 'guess':
+
                 selected = False
                 draw_screen(c, positions, buttons, sizes, task)
                 selector_pos, selected = selector(c,task,positions,key_index,selector_pos)
@@ -288,6 +294,9 @@ for trial in range(START_TRIAL,NUM_TRIALS):
                 elif 'click' in buttons['place_order'].handleEvent(event):
                     if task['trade_size'][trial] > 0:
                         c.press_sound.play()
+                        if task['training']:
+                            if task['wheel_hold_buttons']:
+                                show_instruction(c,'4')
                         task['trial_stage'] = 'pull'
                         buttons, task = draw_screen(c, positions, buttons, sizes, task)
                         buttons['place_order'].draw(c.screen)
@@ -314,8 +323,11 @@ for trial in range(START_TRIAL,NUM_TRIALS):
             pygame.display.update()
 
             savemat(matlab_output_file,task)
-  
+            RTB.reset_input_buffer()
 savemat(matlab_output_file,task)    
 background_music[3].stop()  
-c.exit_screen("Das Trading Spiel fertig. Vielen Dank, dass Sie mitgemacht haben!", font=c.title, font_color=GOLD)
+if task['training']:
+    c.exit_screen("Training ist fertig. Danke!", font=c.title, font_color=GOLD)
+else:
+    c.exit_screen("Das Trading Spiel fertig. Vielen Dank, dass Sie mitgemacht haben!", font=c.title, font_color=GOLD)
 
