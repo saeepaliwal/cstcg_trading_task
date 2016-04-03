@@ -27,9 +27,9 @@ elif task_stage[0] == 'right':
 c.blank_screen()
 
 testing = False
-# # Kludge for testing
-# training = False
-# testing = True
+# Kludge for testing
+training = False
+testing = True
 
 (subjectname) = c.subject_information_screen()
 subject = subjectname.replace(" ","")
@@ -88,6 +88,9 @@ else:
     # Randomize blocks for real trials
     block_order = [1,2,3,4]
     random.shuffle(block_order)
+
+    # PDB TODO KILL THIS
+    block_order = [3,2,1,4]
 
 
     for b in block_order:
@@ -165,6 +168,9 @@ if training:
     instruction_screen(c,positions,sizes,RTB)
 
 for trial in range(START_TRIAL,NUM_TRIALS): 
+    task['wheel1'] = False
+    task['wheel2'] = False
+    task['wheel3'] = False
     next_trial = False    
 
     print trial
@@ -322,11 +328,13 @@ for trial in range(START_TRIAL,NUM_TRIALS):
                         c.log('Summary Trial' + str(trial) + ': Trade:' + str(task['trade_size'][trial]) + 'Account: ' + str([task['account'][trial]]))
                         task['trial_stage'] = 'result'
                         if task['wheel_hold_buttons']:
+                            RTB.reset_input_buffer()
                             individual_price_spin(c,positions,buttons,sizes,task, RTB)
+                            RTB.reset_input_buffer()
                         else:
+                            RTB.reset_input_buffer()
                             spin_prices(c, positions, buttons, task)
-                            show_result(c,positions,buttons,task)
-
+                            RTB.reset_input_buffer()
                         task = process_result(c,positions,buttons,sizes,task, RTB) 
                         next_trial = True
             elif event.type == pygame.QUIT:

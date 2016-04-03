@@ -453,6 +453,7 @@ def clear(c,task):
     return task
 
 def stock_split(c,task, positions, sizes,RTB):
+    RTB.reset_input_buffer()
     c.screen.fill(WHITE)
     card_back = pygame.image.load('./images/trading_task_news1.png').convert_alpha()
     card_won = pygame.image.load('./images/trading_task_news_win.png').convert_alpha()
@@ -467,10 +468,7 @@ def stock_split(c,task, positions, sizes,RTB):
    
     c.screen.blit(card_back,(x_pos,y_pos))
     c.make_banner(split_font.render("Aktiensplit", True, BLACK))
-    c.screen.blit(split_font.render("?",True,BLACK),(fpos_x,fpos_y))
     eeg_trigger(c,task,'gamble_screen')
-    #pygame.display.update()
-    #waitfun(1000)
 
     gamble_button = TradingButton(rect=(positions['gamble_x'],positions['gamble_y'], sizes['bbw'],sizes['sbh']),\
         caption="Halten",  fgcolor=c.background_color, bgcolor=RED, font=c.button)
@@ -482,25 +480,22 @@ def stock_split(c,task, positions, sizes,RTB):
     pygame.time.set_timer(CARD, 1000)
     time_elapsed = 0
     start_time = time.time()
-    c.screen.blit(card_back,(x_pos,y_pos))
-    c.screen.blit(split_font.render("3",True,BLACK),(fpos_x,fpos_y))
-    c.make_banner(split_font.render("Doppelt oder nichts?", True, BLACK))
-    gamble_button.draw(c.screen)
-    no_gamble_button.draw(c.screen)
-    pygame.display.update()
+    # c.screen.blit(card_back,(x_pos,y_pos))
+    # c.screen.blit(split_font.render("3",True,BLACK),(fpos_x,fpos_y))
+    # c.make_banner(split_font.render("Aktiensplit", True, BLACK))
+    # gamble_button.draw(c.screen)
+    # no_gamble_button.draw(c.screen)
+    # pygame.display.update()
 
     if task['training']:
         show_instruction(c,'5')
     c.screen.fill(WHITE)
     c.screen.blit(card_back,(x_pos,y_pos))
     c.screen.blit(split_font.render("3",True,BLACK),(fpos_x,fpos_y))
-    c.make_banner(split_font.render("Doppelt oder nichts?", True, BLACK))
+    c.make_banner(split_font.render("Aktiensplit", True, BLACK))
     gamble_button.draw(c.screen)
     no_gamble_button.draw(c.screen)
     pygame.display.update()
-
-
-
 
     while not decided and time_elapsed < 3:
         time_elapsed = int(round(time.time()-start_time))
@@ -546,7 +541,7 @@ def stock_split(c,task, positions, sizes,RTB):
             elif event.type == CARD:
                 c.screen.blit(card_back,(x_pos,y_pos))
                 c.screen.blit(split_font.render(str(3-time_elapsed),True,BLACK),(fpos_x,fpos_y))
-                c.make_banner(split_font.render("Doppelt oder nichts?", True, BLACK))
+                c.make_banner(split_font.render("Aktiensplit", True, BLACK))
                 pygame.display.flip()
 
             gamble_button.draw(c.screen)
@@ -617,48 +612,6 @@ def show_result(c,positions,buttons,task, spinning=False):
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][3]],(positions['ticker']['x3'],positions['ticker']['y']))
         else:
             spin_prices(c, positions, buttons, task)
-
-    #     else:
-    #         eeg_trigger(c,task,'automatic_stop_1')
-    #         c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
-
-    #         #c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
-    #         c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
-    #         pygame.display.flip()
-    #         waitfun(wait)
-
-    #         eeg_trigger(c,task,'automatic_stop_2')
-    #         c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
-    #         pygame.display.flip()
-    #         waitfun(wait)
-
-    #         if task['result_sequence'][task['trial']][0] == '1':
-    #             eeg_trigger(c,task,'automatic_stop_3_win')
-    #         else:
-    #             eeg_trigger(c,task,'automatic_stop_3_loss')
-    #         c.screen.blit(symbols[task['result_sequence'][task['trial']][3]],(positions['ticker']['x3'],positions['ticker']['y']))
-    #         pygame.display.flip()
-    #         waitfun(wait) 
-    # else:
-    #     c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
-    #     c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
-    #     eeg_trigger(c,task,'stop_1')
-    #     pygame.display.flip()
-    #     waitfun(wait)
-
-    #     c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
-    #     eeg_trigger(c,task,'stop_2')
-    #     pygame.display.flip()
-    #     waitfun(wait)
-
-    #     c.screen.blit(symbols[task['result_sequence'][task['trial']][3]],(positions['ticker']['x3'],positions['ticker']['y']))
-    #     if task['result_sequence'][task['trial']][0] == '1':
-    #         eeg_trigger(c,task,'stop_3_win')
-    #     else:
-    #         eeg_trigger(c,task,'stop_3_loss')
-
-    #     pygame.display.flip()
-    #     waitfun(1000)
 
 def change_machine_screen(c):
     waitfun(1000)
@@ -1050,7 +1003,7 @@ def spin_prices(c, positions, buttons, task):
 
         elif counter_max < counter < counter_max+20:
             if task['wheel_hold_buttons']:
-                if not task['wheel2']:   
+                if not task['wheel2'] and not task['wheel1']:   
                     c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                     c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
                     pygame.display.flip()
@@ -1063,18 +1016,6 @@ def spin_prices(c, positions, buttons, task):
                     c.screen.blit(symbols[str(random.randint(1,9))],(positions['ticker']['x3'],positions['ticker']['y']))
                     pygame.display.flip()
                     c.wait_fun(2*lag)
-                else:
-                    c.wait_fun(lag)
-
-                    c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
-                    c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
-                    c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
-                    pygame.display.flip()
-                    c.wait_fun(lag)
-
-                    c.screen.blit(symbols[str(random.randint(1,9))],(positions['ticker']['x3'],positions['ticker']['y']))
-                    pygame.display.flip()
-                    c.wait_fun(lag)
             else:
                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
@@ -1124,17 +1065,18 @@ def spin_prices(c, positions, buttons, task):
 
         elif counter_max+20 < counter < counter_max+40:
             if task['wheel_hold_buttons']:
-                c.wait_fun(lag)
-                c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
-                c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
-                c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
-         
-                pygame.display.flip()
-                c.wait_fun(2*lag)
+                if not task['wheel2']:
+                    c.wait_fun(lag)
+                    c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
+                    c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
+                    c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
+             
+                    pygame.display.flip()
+                    c.wait_fun(2*lag)
 
-                c.screen.blit(symbols[str(random.randint(1,9))],(positions['ticker']['x3'],positions['ticker']['y']))
-                pygame.display.flip()
-                c.wait_fun(lag)
+                    c.screen.blit(symbols[str(random.randint(1,9))],(positions['ticker']['x3'],positions['ticker']['y']))
+                    pygame.display.flip()
+                    c.wait_fun(lag)
             else:
                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
