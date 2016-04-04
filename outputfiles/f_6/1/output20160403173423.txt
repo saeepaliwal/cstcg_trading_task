@@ -1,0 +1,366 @@
+Attention screen on 1459697665.325748
+Attention screen off 1459697668.325139
+Starting block 2 at 1459697668.325163
+
+Stock 1at 1459697668.32517
+
+Wheel hold buttons are True at 1459697668.325176
+
+EEG: Sent trigger 0 at 1459697668.410358
+
+EEG: Sent trigger 197 at 1459697668.410389
+
+Selected guess on Trial 6 1459697669.390038
+
+EEG: Sent trigger 198 at 1459697669.416464
+
+EEG: Sent trigger 199 at 1459697669.552514
+
+Trial 6: Added shares to trade. 1459697669.579605
+
+EEG: Sent trigger 201 at 1459697669.958728
+
+Trial 6: Pulling wheels 1459697669.984988
+
+Summary Trial6: Trade:5Account: [2000]
+EEG: Sent trigger 202 at 1459697671.289262
+
+EEG: Sent trigger 203 at 1459697673.371303
+
+EEG: Sent trigger 205 at 1459697674.771256
+
+EEG: Sent trigger 1 at 1459697675.225241
+
+EEG: Sent trigger 197 at 1459697675.22527
+
+Selected guess on Trial 7 1459697676.038198
+
+EEG: Sent trigger 198 at 1459697676.06436
+
+EEG: Sent trigger 199 at 1459697676.209798
+
+Trial 7: Added shares to trade. 1459697676.238889
+
+EEG: Sent trigger 199 at 1459697676.469155
+
+Trial 7: Added shares to trade. 1459697676.496593
+
+EEG: Sent trigger 201 at 1459697677.191921
+
+Trial 7: Pulling wheels 1459697677.219566
+
+Summary Trial7: Trade:10Account: [1800]
+EEG: Sent trigger 202 at 1459697678.546323
+
+EEG: Sent trigger 203 at 1459697680.643296
+
+EEG: Sent trigger 205 at 1459697682.034248
+
+EEG: Sent trigger 2 at 1459697682.478855
+
+EEG: Sent trigger 197 at 1459697682.478886
+
+Selected guess on Trial 8 1459697683.239928
+
+EEG: Sent trigger 198 at 1459697683.266381
+
+EEG: Sent trigger 199 at 1459697683.401036
+
+Trial 8: Added shares to trade. 1459697683.428735
+
+EEG: Sent trigger 199 at 1459697683.516978
+
+Trial 8: Added shares to trade. 1459697683.545451
+
+EEG: Sent trigger 201 at 1459697683.924453
+
+Trial 8: Pulling wheels 1459697683.95078
+
+Summary Trial8: Trade:10Account: [1600]
+EEG: Sent trigger 202 at 1459697685.277273
+
+EEG: Sent trigger 203 at 1459697687.364283
+
+EEG: Sent trigger 205 at 1459697688.777304
+
+Changing machines at 1459697690.140208
+
+Starting block 4 at 1459697694.221168
+
+Machine 3 at 1459697694.221183
+
+Wheel hold buttons are False at 1459697694.221188
+
+EEG: Sent trigger 3 at 1459697694.308177
+
+EEG: Sent trigger 235 at 1459697694.30821
+
+Selected guess on Trial 9 1459697695.268258
+
+EEG: Sent trigger 236 at 1459697695.294773
+
+EEG: Sent trigger 237 at 1459697695.433313
+
+Trial 9: Added shares to trade. 1459697695.462143
+
+EEG: Sent trigger 237 at 1459697695.652346
+
+Trial 9: Added shares to trade. 1459697695.683759
+
+EEG: Sent trigger 239 at 1459697695.851327
+
+Trial 9: Pulling wheels 1459697695.877775
+
+Summary Trial9: Trade:10Account: [2000]
+Trial 9: Holding wheels at 1459697696.406369
+
+EEG: Sent trigger 240 at 1459697696.43135
+
+EEG: Sent trigger 240 at 1459697696.468262
+
+EEG: Sent trigger 240 at 1459697696.581183
+
+EEG: Sent trigger 240 at 1459697696.691182
+
+EEG: Sent trigger 240 at 1459697696.809182
+
+EEG: Sent trigger 240 at 1459697696.916192
+
+EEG: Sent trigger 240 at 1459697697.03017
+
+EEG: Sent trigger 240 at 1459697697.150184
+
+EEG: Sent trigger 240 at 1459697697.257177
+
+EEG: Sent trigger 240 at 1459697697.362181
+
+Trial 9: Holding wheels at 1459697697.465395
+
+EEG: Sent trigger 240 at 1459697697.494279
+
+EEG: Sent trigger 242 at 1459697697.494369
+
+EEG: Sent trigger 240 at 1459697697.530266
+
+EEG: Sent trigger 242 at 1459697697.530443
+
+EEG: Sent trigger 240 at 1459697697.607176
+
+EEG: Sent trigger 242 at 1459697697.607266
+
+EEG: Sent trigger 240 at 1459697697.678186
+
+EEG: Sent trigger 242 at 1459697697.678262
+
+EEG: Sent trigger 240 at 1459697697.749182
+
+EEG: Sent trigger 242 at 1459697697.749274
+
+EEG: Sent trigger 240 at 1459697697.820174
+
+EEG: Sent trigger 242 at 1459697697.820269
+
+EEG: Sent trigger 240 at 1459697697.899179
+
+EEG: Sent trigger 242 at 1459697697.899276
+
+EEG: Sent trigger 240 at 1459697697.975175
+
+EEG: Sent trigger 242 at 1459697697.975299
+
+EEG: Sent trigger 240 at 1459697698.056176
+
+EEG: Sent trigger 242 at 1459697698.056299
+
+EEG: Sent trigger 240 at 1459697698.134177
+
+EEG: Sent trigger 242 at 1459697698.134269
+
+EEG: Sent trigger 240 at 1459697698.207178
+
+EEG: Sent trigger 242 at 1459697698.207258
+
+EEG: Sent trigger 240 at 1459697698.279182
+
+EEG: Sent trigger 242 at 1459697698.279255
+
+EEG: Sent trigger 240 at 1459697698.352185
+
+EEG: Sent trigger 242 at 1459697698.352276
+
+EEG: Sent trigger 240 at 1459697698.425185
+
+EEG: Sent trigger 242 at 1459697698.425331
+
+EEG: Sent trigger 240 at 1459697698.498239
+
+EEG: Sent trigger 242 at 1459697698.498396
+
+EEG: Sent trigger 240 at 1459697698.569193
+
+EEG: Sent trigger 242 at 1459697698.569284
+
+EEG: Sent trigger 240 at 1459697698.640175
+
+EEG: Sent trigger 242 at 1459697698.640266
+
+EEG: Sent trigger 240 at 1459697698.711182
+
+EEG: Sent trigger 242 at 1459697698.711276
+
+EEG: Sent trigger 246 at 1459697701.614303
+
+EEG: Sent trigger 249 at 1459697702.467376
+
+EEG: Sent trigger 250 at 1459697705.628585
+
+EEG: Sent trigger 251 at 1459697707.277127
+
+Did not gamble on trial 9 1459697707.935766
+
+EEG: Sent trigger 4 at 1459697708.125903
+
+EEG: Sent trigger 235 at 1459697708.125935
+
+Selected guess on Trial 10 1459697709.187049
+
+EEG: Sent trigger 236 at 1459697709.213994
+
+EEG: Sent trigger 237 at 1459697709.456066
+
+Trial 10: Added shares to trade. 1459697709.485034
+
+EEG: Sent trigger 237 at 1459697709.631315
+
+Trial 10: Added shares to trade. 1459697709.660626
+
+EEG: Sent trigger 239 at 1459697709.896316
+
+Trial 10: Pulling wheels 1459697709.923126
+
+Summary Trial10: Trade:10Account: [2180]
+Trial 10: Holding wheels at 1459697710.330291
+
+EEG: Sent trigger 240 at 1459697710.355563
+
+EEG: Sent trigger 240 at 1459697710.391192
+
+EEG: Sent trigger 240 at 1459697710.512178
+
+EEG: Sent trigger 240 at 1459697710.619262
+
+EEG: Sent trigger 240 at 1459697710.725182
+
+EEG: Sent trigger 240 at 1459697710.834209
+
+EEG: Sent trigger 240 at 1459697710.952247
+
+EEG: Sent trigger 240 at 1459697711.077181
+
+EEG: Sent trigger 240 at 1459697711.185261
+
+Trial 10: Holding wheels at 1459697711.282285
+
+EEG: Sent trigger 240 at 1459697711.308145
+
+EEG: Sent trigger 242 at 1459697711.308259
+
+EEG: Sent trigger 240 at 1459697711.345231
+
+EEG: Sent trigger 242 at 1459697711.345397
+
+EEG: Sent trigger 240 at 1459697711.422184
+
+EEG: Sent trigger 242 at 1459697711.422301
+
+EEG: Sent trigger 240 at 1459697711.495186
+
+EEG: Sent trigger 242 at 1459697711.495306
+
+EEG: Sent trigger 240 at 1459697711.573198
+
+EEG: Sent trigger 242 at 1459697711.57333
+
+EEG: Sent trigger 240 at 1459697711.648213
+
+EEG: Sent trigger 242 at 1459697711.648387
+
+EEG: Sent trigger 240 at 1459697711.725175
+
+EEG: Sent trigger 242 at 1459697711.725262
+
+EEG: Sent trigger 240 at 1459697711.801204
+
+EEG: Sent trigger 242 at 1459697711.801348
+
+EEG: Sent trigger 240 at 1459697711.87519
+
+EEG: Sent trigger 242 at 1459697711.875276
+
+EEG: Sent trigger 240 at 1459697711.947178
+
+EEG: Sent trigger 242 at 1459697711.947325
+
+EEG: Sent trigger 240 at 1459697712.017192
+
+EEG: Sent trigger 242 at 1459697712.017322
+
+EEG: Sent trigger 240 at 1459697712.096181
+
+EEG: Sent trigger 242 at 1459697712.09628
+
+EEG: Sent trigger 240 at 1459697712.170203
+
+EEG: Sent trigger 242 at 1459697712.170336
+
+EEG: Sent trigger 240 at 1459697712.24318
+
+EEG: Sent trigger 242 at 1459697712.243278
+
+EEG: Sent trigger 240 at 1459697712.313177
+
+EEG: Sent trigger 242 at 1459697712.31332
+
+EEG: Sent trigger 240 at 1459697712.384225
+
+EEG: Sent trigger 242 at 1459697712.384326
+
+EEG: Sent trigger 240 at 1459697712.454247
+
+EEG: Sent trigger 242 at 1459697712.454375
+
+EEG: Sent trigger 240 at 1459697712.523185
+
+EEG: Sent trigger 242 at 1459697712.52328
+
+EEG: Sent trigger 240 at 1459697712.592192
+
+EEG: Sent trigger 242 at 1459697712.592382
+
+EEG: Sent trigger 240 at 1459697712.661175
+
+EEG: Sent trigger 242 at 1459697712.661272
+
+EEG: Sent trigger 246 at 1459697715.586301
+
+EEG: Sent trigger 249 at 1459697716.436369
+
+EEG: Sent trigger 250 at 1459697719.613488
+
+EEG: Sent trigger 251 at 1459697721.248762
+
+EEG: Sent trigger 5 at 1459697723.867506
+
+EEG: Sent trigger 235 at 1459697723.867537
+
+Selected guess on Trial 11 1459697724.942924
+
+EEG: Sent trigger 236 at 1459697724.968894
+
+EEG: Sent trigger 237 at 1459697725.110696
+
+Trial 11: Added shares to trade. 1459697725.138473
+
+EEG: Sent trigger 237 at 1459697725.221744
+
+Tria

@@ -1,0 +1,109 @@
+Attention screen on 1459677280.468768
+Attention screen off 1459677283.468282
+Starting block 3 at 1459677283.468308
+
+Stock 2at 1459677283.468315
+
+Wheel hold buttons are True at 1459677283.46832
+
+EEG: Sent trigger 0 at 1459677283.53757
+
+EEG: Sent trigger 213 at 1459677283.537606
+
+Selected guess on Trial 6 1459677284.466014
+
+EEG: Sent trigger 214 at 1459677284.490779
+
+EEG: Sent trigger 215 at 1459677284.676621
+
+Trial 6: Added shares to trade. 1459677284.692713
+
+EEG: Sent trigger 215 at 1459677284.960956
+
+Trial 6: Added shares to trade. 1459677284.976977
+
+EEG: Sent trigger 217 at 1459677285.195525
+
+Trial 6: Pulling wheels 1459677285.21015
+
+Summary Trial6: Trade:10Account: [2000]
+Trial 6: Holding wheels at 1459677285.405527
+
+EEG: Sent trigger 218 at 1459677285.421716
+
+EEG: Sent trigger 218 at 1459677285.453319
+
+EEG: Sent trigger 218 at 1459677285.53634
+
+EEG: Sent trigger 218 at 1459677285.620321
+
+EEG: Sent trigger 218 at 1459677285.70432
+
+EEG: Sent trigger 218 at 1459677285.791369
+
+EEG: Sent trigger 218 at 1459677285.882323
+
+EEG: Sent trigger 218 at 1459677285.97032
+
+EEG: Sent trigger 218 at 1459677286.049327
+
+EEG: Sent trigger 218 at 1459677286.127316
+
+EEG: Sent trigger 218 at 1459677286.207333
+
+EEG: Sent trigger 218 at 1459677286.287338
+
+EEG: Sent trigger 218 at 1459677286.366315
+
+EEG: Sent trigger 218 at 1459677286.444318
+
+EEG: Sent trigger 218 at 1459677286.521331
+
+EEG: Sent trigger 218 at 1459677286.606316
+
+EEG: Sent trigger 218 at 1459677286.689316
+
+EEG: Sent trigger 218 at 1459677286.765324
+
+EEG: Sent trigger 218 at 1459677286.841327
+
+EEG: Sent trigger 218 at 1459677286.921323
+
+EEG: Sent trigger 218 at 1459677287.000322
+
+EEG: Sent trigger 218 at 1459677287.081321
+
+EEG: Sent trigger 218 at 1459677287.158323
+
+EEG: Sent trigger 218 at 1459677287.237315
+
+EEG: Sent trigger 218 at 1459677287.314334
+
+EEG: Sent trigger 218 at 1459677287.390313
+
+EEG: Sent trigger 218 at 1459677287.474322
+
+EEG: Sent trigger 218 at 1459677287.549321
+
+EEG: Sent trigger 218 at 1459677287.631328
+
+EEG: Sent trigger 218 at 1459677287.707329
+
+EEG: Sent trigger 218 at 1459677287.783314
+
+EEG: Sent trigger 218 at 1459677287.866319
+
+EEG: Sent trigger 218 at 1459677287.949315
+
+EEG: Sent trigger 218 at 1459677288.033323
+
+EEG: Sent trigger 218 at 1459677288.116321
+
+EEG: Sent trigger 218 at 1459677288.199322
+
+EEG: Sent trigger 218 at 1459677288.282311
+
+EEG: Sent trigger 218 at 1459677288.365312
+
+EEG: Sent trigger 218 at 1459677288.441335
+

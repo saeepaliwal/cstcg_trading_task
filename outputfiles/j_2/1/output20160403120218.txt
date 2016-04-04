@@ -1,0 +1,39 @@
+Attention screen on 1459677740.501768
+Attention screen off 1459677743.501272
+Starting block 1 at 1459677743.501296
+
+Stock 0at 1459677743.501302
+
+Wheel hold buttons are False at 1459677743.501307
+
+EEG: Sent trigger 0 at 1459677743.580753
+
+EEG: Sent trigger 181 at 1459677743.580783
+
+Selected guess on Trial 6 1459677744.837191
+
+EEG: Sent trigger 182 at 1459677744.852377
+
+EEG: Sent trigger 183 at 1459677745.472598
+
+Trial 6: Added shares to trade. 1459677745.48892
+
+EEG: Sent trigger 183 at 1459677745.761674
+
+Trial 6: Added shares to trade. 1459677745.781828
+
+EEG: Sent trigger 185 at 1459677746.070284
+
+Trial 6: Pulling wheels 1459677746.084822
+
+Summary Trial6: Trade:10Account: [2000]
+EEG: Sent trigger 186 at 1459677747.018939
+
+EEG: Sent trigger 187 at 1459677748.497542
+
+EEG: Sent trigger 189 at 1459677749.511583
+
+EEG: Sent trigger 1 at 1459677749.930523
+
+EEG: Sent trigger 181 at 1459677749.930555
+

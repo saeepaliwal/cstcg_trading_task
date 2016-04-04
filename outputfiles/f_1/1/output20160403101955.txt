@@ -1,0 +1,117 @@
+Attention screen on 1459671597.294033
+Attention screen off 1459671600.293713
+Starting block 3 at 1459671600.293737
+
+Stock 2at 1459671600.293744
+
+Wheel hold buttons are True at 1459671600.293749
+
+EEG: Sent trigger 0 at 1459671600.361941
+
+EEG: Sent trigger 213 at 1459671600.361973
+
+Selected guess on Trial 6 1459671601.964926
+
+EEG: Sent trigger 214 at 1459671601.986273
+
+EEG: Sent trigger 215 at 1459671602.208361
+
+Trial 6: Added shares to trade. 1459671602.223606
+
+EEG: Sent trigger 215 at 1459671602.472678
+
+Trial 6: Added shares to trade. 1459671602.48815
+
+EEG: Sent trigger 215 at 1459671602.695894
+
+Trial 6: Added shares to trade. 1459671602.710355
+
+EEG: Sent trigger 217 at 1459671602.922827
+
+Trial 6: Pulling wheels 1459671602.937174
+
+Summary Trial6: Trade:15Account: [2000]
+Trial 6: Holding wheels at 1459671603.740825
+
+EEG: Sent trigger 218 at 1459671603.76297
+
+EEG: Sent trigger 218 at 1459671603.791773
+
+EEG: Sent trigger 218 at 1459671603.870754
+
+EEG: Sent trigger 218 at 1459671603.957754
+
+EEG: Sent trigger 218 at 1459671604.042758
+
+EEG: Sent trigger 218 at 1459671604.121756
+
+EEG: Sent trigger 218 at 1459671604.205768
+
+EEG: Sent trigger 218 at 1459671604.289769
+
+EEG: Sent trigger 218 at 1459671604.373752
+
+EEG: Sent trigger 218 at 1459671604.456752
+
+EEG: Sent trigger 218 at 1459671604.538809
+
+EEG: Sent trigger 218 at 1459671604.623753
+
+EEG: Sent trigger 218 at 1459671604.707759
+
+EEG: Sent trigger 218 at 1459671604.791758
+
+EEG: Sent trigger 218 at 1459671604.873758
+
+EEG: Sent trigger 218 at 1459671604.958753
+
+EEG: Sent trigger 218 at 1459671605.041942
+
+EEG: Sent trigger 218 at 1459671605.125759
+
+EEG: Sent trigger 218 at 1459671605.208755
+
+EEG: Sent trigger 218 at 1459671605.292758
+
+EEG: Sent trigger 218 at 1459671605.37477
+
+EEG: Sent trigger 218 at 1459671605.458784
+
+EEG: Sent trigger 218 at 1459671605.54276
+
+EEG: Sent trigger 218 at 1459671605.626749
+
+EEG: Sent trigger 218 at 1459671605.71176
+
+EEG: Sent trigger 218 at 1459671605.793771
+
+EEG: Sent trigger 218 at 1459671605.877756
+
+EEG: Sent trigger 218 at 1459671605.960766
+
+Trial 6: Holding wheels at 1459671606.031853
+
+EEG: Sent trigger 218 at 1459671606.050827
+
+EEG: Sent trigger 220 at 1459671606.051082
+
+EEG: Sent trigger 218 at 1459671606.078754
+
+EEG: Sent trigger 220 at 1459671606.079013
+
+EEG: Sent trigger 218 at 1459671606.139746
+
+EEG: Sent trigger 220 at 1459671606.140032
+
+EEG: Sent trigger 218 at 1459671606.190753
+
+EEG: Sent trigger 220 at 1459671606.191029
+
+EEG: Sent trigger 218 at 1459671606.256748
+
+EEG: Sent trigger 220 at 1459671606.257007
+
+EEG: Sent trigger 218 at 1459671606.307754
+
+EEG: Sent trigger 220 at 1459671606.30803
+
