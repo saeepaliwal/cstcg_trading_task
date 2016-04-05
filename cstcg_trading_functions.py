@@ -574,7 +574,7 @@ def win_screen(c,positions, buttons, sizes, task):
         else:
             eeg_trigger(c,task,'win_screen_norm')
         c.screen.blit(win_banner,(positions['banner_x']+100,positions['banner_y']+70)) 
-        c.text_screen('Gewinnprozent: ' + str(percent_change[task['reward_grade'][task['trial']]]*100) + '%', font=c.title,font_color=GOLD, valign='top', y_displacement= -200, wait_time=1500)
+        c.text_screen('Gewinnprozent: ' + str(percent_change[task['reward_grade'][task['trial']]-1]*100) + '%', font=c.title,font_color=GOLD, valign='top', y_displacement= -200, wait_time=1500)
        # c.screen.blit(pygame.transform.scale(winnerblit, (c.screen_width, c.screen_height)),(10,10))
         pygame.display.update()
         waitfun(task['win_screen_interval'])
@@ -590,25 +590,16 @@ def show_win_banner(c,positions,reward):
 
 def show_result(c,positions,buttons,task, spinning=False):
     percent_change = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
-
-    wait = task['inter_wheel_interval']
  
     if task['wheel_hold_buttons']:
         if spinning:
             if task['wheel1']:
-                eeg_trigger(c,task,'pressed_stop_1')
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
 
             if task['wheel2']:
-                eeg_trigger(c,task,'pressed_stop_2')
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
 
             if task['wheel3']:
-                if task['result_sequence'][task['trial']][0] == '1':
-                    eeg_trigger(c,task,'pressed_stop_3_win')
-                else:
-                    eeg_trigger(c,task,'pressed_stop_3_loss')
-
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][3]],(positions['ticker']['x3'],positions['ticker']['y']))
         else:
             spin_prices(c, positions, buttons, task)
@@ -627,7 +618,7 @@ def process_result(c,positions,buttons,sizes,task, RTB):
     reward = 0
     if task['result_sequence'][task['trial']][0] == '1': # win
         task['reward_grade'][task['trial']] = int(task['result_sequence'][task['trial']][2])
-        reward = task['trade_size'][task['trial']]*percent_change[task['reward_grade'][task['trial']]]*task['current_price'][task['trial']-1]
+        reward = task['trade_size'][task['trial']]*percent_change[task['reward_grade'][task['trial']]-1]*task['current_price'][task['trial']-1]
         task['winloss'][task['trial']] = reward
         win_screen(c,positions, buttons, sizes, task)
         eeg_trigger(c,task,'money_banner')
@@ -773,14 +764,13 @@ def print_prices_spin(px1):
 
 def individual_price_spin(c,positions,buttons,sizes,task, RTB):
     pygame.event.clear()
-    n = 100
     lag = 10
     show1 = True
     show2 = False
     show3 = False
     show4 = False
 
-    len_spin = 30
+    len_spin = 50
     width = round(210/(len_spin+5))
 
     task['wheel1'] = False
@@ -821,8 +811,7 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                     elif event.type==MOUSEBUTTONUP:
                         if 'click' in buttons['hold1'].handleEvent(event):
                             task['wheel1'] = True
-                            #c.press_sound.play()
-                            #c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
+                            eeg_trigger(c,task,'pressed_stop_1')
                             c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                             show_result(c,positions,buttons,task,spinning=True)
                             buttons['hold1'].draw(c.screen)
@@ -831,8 +820,7 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                         if task['ungrey_wheel2']:
                             if 'click' in buttons['hold2'].handleEvent(event):
                                 task['wheel2'] = True
-                                #c.press_sound.play()
-                                #c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
+                                eeg_trigger(c,task,'pressed_stop_2')
                                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                                 show_result(c,positions,buttons,task, spinning=True)
                                 buttons['hold2'].draw(c.screen)                                
@@ -841,8 +829,10 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                         if task['ungrey_wheel3']:
                             if 'click' in buttons['hold3'].handleEvent(event):
                                 task['wheel3'] = True
-                                #c.press_sound.play()
-                                #c.screen.blit(tickers[str(task['stock'])],(positions['ticker']['base_x'],positions['ticker']['base_y']))
+                                if task['result_sequence'][task['trial']][0] == '1':
+                                    eeg_trigger(c,task,'pressed_stop_3_win')
+                                else:
+                                    eeg_trigger(c,task,'pressed_stop_3_loss')
                                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                                 show_result(c,positions,buttons,task, spinning=True)
                                 buttons['hold3'].draw(c.screen)
@@ -855,12 +845,12 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
             c.wait_fun(lag)
             show_result(c,positions,buttons,task, spinning=True)
 
-            if counter == 10:
+            if counter == 15:
                 task['ungrey_wheel2'] = True
                 buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
                 for key in buttons:
                     buttons[key].draw(c.screen)
-            elif counter == 20:
+            elif counter == 30:
                 task['ungrey_wheel3'] = True
                 buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
                 for key in buttons:
@@ -874,27 +864,14 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                 px_update = pygame.Rect(positions['ticker']['px1']+counter*width-1,positions['ticker']['py']-num1_b*15,width,num1_b*15)
                 pygame.draw.rect(c.screen,PX_BLUE,px_update,0)
                 pygame.display.flip()
+                c.wait_fun(lag)
 
             if not task['wheel2']:
-                if task['wheel1']:
-                    s = task['result_sequence'][task['trial']][1]
-                    idx = round(random.betavariate(1,1),1)
-                    if idx > 0.7:
-                        c.screen.blit(symbols[str(s)],(positions['ticker']['x2'],positions['ticker']['y']))
-                        px_update2 = pygame.Rect(positions['ticker']['px2']+counter*width-1,positions['ticker']['py']-int(s)*15,width,int(s)*15)
-                        pygame.draw.rect(c.screen,PX_BLUE,px_update2,0)
-                    else:
-                        num2 = random.randint(1,9)
-                        num2_b = random.randint(7,9)
-                        c.screen.blit(symbols[str(num2)],(positions['ticker']['x2'],positions['ticker']['y']))
-                        px_update2 = pygame.Rect(positions['ticker']['px2']+counter*width-1,positions['ticker']['py']-num2_b*15,width,num2_b*15)
-                        pygame.draw.rect(c.screen,PX_BLUE,px_update2,0)
-                else:
-                    num2 = random.randint(1,9)
-                    num2_b = random.randint(7,9)
-                    c.screen.blit(symbols[str(num2)],(positions['ticker']['x2'],positions['ticker']['y']))
-                    px_update2 = pygame.Rect(positions['ticker']['px2']+counter*width-1,positions['ticker']['py']-num2_b*15,width,num2_b*15)
-                    pygame.draw.rect(c.screen,PX_BLUE,px_update2,0)
+                num2 = random.randint(1,9)
+                num2_b = random.randint(7,9)
+                c.screen.blit(symbols[str(num2)],(positions['ticker']['x2'],positions['ticker']['y']))
+                px_update2 = pygame.Rect(positions['ticker']['px2']+counter*width-1,positions['ticker']['py']-num2_b*15,width,num2_b*15)
+                pygame.draw.rect(c.screen,PX_BLUE,px_update2,0)
                 pygame.display.flip()
                 c.wait_fun(lag)
 
@@ -973,7 +950,6 @@ def spin_prices(c, positions, buttons, task):
             if task['wheel1']:
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
             else:
-                c.wait_fun(lag)
                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                 pygame.display.flip()
                 c.wait_fun(lag)
@@ -996,8 +972,6 @@ def spin_prices(c, positions, buttons, task):
                 px_update3 = pygame.Rect(positions['ticker']['px3']+counter*width-1,positions['ticker']['py']-num3_b*15,width,num3_b*15)
                 pygame.draw.rect(c.screen,PX_BLUE,px_update3,0)
 
-                pygame.display.flip()
-                c.wait_fun(lag)
                 pygame.display.flip()
                 c.wait_fun(lag)
 
@@ -1036,7 +1010,7 @@ def spin_prices(c, positions, buttons, task):
                 px_update3 = pygame.Rect(positions['ticker']['px3']+counter*width-1,positions['ticker']['py']-num3_b*15,width,num3_b*15)
                 pygame.draw.rect(c.screen,PX_BLUE,px_update3,0)
                 pygame.display.flip()
-                c.wait_fun(lag)
+                c.wait_fun(2*lag)
 
         elif counter == counter_max+20:
             if task['wheel2']:
@@ -1078,6 +1052,7 @@ def spin_prices(c, positions, buttons, task):
                     pygame.display.flip()
                     c.wait_fun(lag)
             else:
+                c.wait_fun(lag)
                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
@@ -1090,7 +1065,7 @@ def spin_prices(c, positions, buttons, task):
                 px_update3 = pygame.Rect(positions['ticker']['px3']+counter*width-1,positions['ticker']['py']-num3_b*15,width,num3_b*15)
                 pygame.draw.rect(c.screen,PX_BLUE,px_update3,0)
                 pygame.display.flip()
-                c.wait_fun(lag)
+                c.wait_fun(2*lag)
 
         elif counter == counter_max+40:
             c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))

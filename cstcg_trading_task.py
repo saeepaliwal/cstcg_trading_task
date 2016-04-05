@@ -10,7 +10,6 @@ import trading_buttons
 from scipy.io import savemat
 import platform
 
-
 c = ChoiceTask(background_color=BLACK, 
     title  = pygame.font.Font('./fonts/SansSerifFLF.otf', 40),
     body  = pygame.font.Font('./fonts/Oswald-Bold.ttf', 30),
@@ -27,9 +26,9 @@ elif task_stage[0] == 'right':
 c.blank_screen()
 
 testing = False
-# Kludge for testing
-training = False
-testing = True
+# # Kludge for testing
+# training = False
+# testing = True
 
 (subjectname) = c.subject_information_screen()
 subject = subjectname.replace(" ","")
@@ -88,10 +87,6 @@ else:
     # Randomize blocks for real trials
     block_order = [1,2,3,4]
     random.shuffle(block_order)
-
-    # PDB TODO KILL THIS
-    block_order = [3,2,1,4]
-
 
     for b in block_order:
         with open ('./traces/taskBackend_' + str(b) + '.txt','r') as f:
