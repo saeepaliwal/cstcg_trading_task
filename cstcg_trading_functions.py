@@ -480,12 +480,6 @@ def stock_split(c,task, positions, sizes,RTB):
     pygame.time.set_timer(CARD, 1000)
     time_elapsed = 0
     start_time = time.time()
-    # c.screen.blit(card_back,(x_pos,y_pos))
-    # c.screen.blit(split_font.render("3",True,BLACK),(fpos_x,fpos_y))
-    # c.make_banner(split_font.render("Aktiensplit", True, BLACK))
-    # gamble_button.draw(c.screen)
-    # no_gamble_button.draw(c.screen)
-    # pygame.display.update()
 
     if task['training']:
         show_instruction(c,'5')
@@ -784,10 +778,21 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
 
     keep_spinning = True
     while keep_spinning:
+        if counter == 15:
+            task['ungrey_wheel2'] = True
+            buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
+            for key in buttons:
+                buttons[key].draw(c.screen)
+        elif counter == 30:
+            task['ungrey_wheel3'] = True
+            buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
+            for key in buttons:
+                buttons[key].draw(c.screen)
+        pygame.display.flip()
+
         key_press = RTB.read() 
         if len(key_press):
             key_index = ord(key_press)
-
             events = process_rtb(positions,key_index, 'pull', task['wheel_hold_buttons'], task)
             if len(events) > 0:
                 pygame.event.post(events[0])
@@ -845,18 +850,6 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
             c.wait_fun(lag)
             show_result(c,positions,buttons,task, spinning=True)
 
-            if counter == 15:
-                task['ungrey_wheel2'] = True
-                buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
-                for key in buttons:
-                    buttons[key].draw(c.screen)
-            elif counter == 30:
-                task['ungrey_wheel3'] = True
-                buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
-                for key in buttons:
-                    buttons[key].draw(c.screen)
-            pygame.display.flip()
-
             if not task['wheel1']:
                 num1 = random.randint(1,9)
                 num1_b = random.randint(1,3)
@@ -864,7 +857,7 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                 px_update = pygame.Rect(positions['ticker']['px1']+counter*width-1,positions['ticker']['py']-num1_b*15,width,num1_b*15)
                 pygame.draw.rect(c.screen,PX_BLUE,px_update,0)
                 pygame.display.flip()
-                c.wait_fun(lag)
+            c.wait_fun(lag)
 
             if not task['wheel2']:
                 num2 = random.randint(1,9)
@@ -873,7 +866,7 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                 px_update2 = pygame.Rect(positions['ticker']['px2']+counter*width-1,positions['ticker']['py']-num2_b*15,width,num2_b*15)
                 pygame.draw.rect(c.screen,PX_BLUE,px_update2,0)
                 pygame.display.flip()
-                c.wait_fun(lag)
+            c.wait_fun(lag)
 
             if not task['wheel3']:
                 num3 = random.randint(1,9)
@@ -882,7 +875,7 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                 px_update3 = pygame.Rect(positions['ticker']['px3']+counter*width-1,positions['ticker']['py']-num3_b*15,width,num3_b*15)
                 pygame.draw.rect(c.screen,PX_BLUE,px_update3,0)
                 pygame.display.flip()
-                c.wait_fun(lag)
+            c.wait_fun(lag)
 
 
             if task['wheel1'] and task['wheel2'] and task['wheel3']:
@@ -947,7 +940,7 @@ def spin_prices(c, positions, buttons, task):
             c.wait_fun(lag)
 
         elif counter == counter_max:
-            if task['wheel1']:
+            if task['wheel_hold_buttons'] and task['wheel1']:
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][1]],(positions['ticker']['x1'],positions['ticker']['y']))
             else:
                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
@@ -1013,7 +1006,7 @@ def spin_prices(c, positions, buttons, task):
                 c.wait_fun(2*lag)
 
         elif counter == counter_max+20:
-            if task['wheel2']:
+            if task['wheel_hold_buttons'] and task['wheel2']:
                 c.screen.blit(symbols[task['result_sequence'][task['trial']][2]],(positions['ticker']['x2'],positions['ticker']['y']))
             else:  
                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
@@ -1090,90 +1083,6 @@ def spin_prices(c, positions, buttons, task):
             keep_spinning = False
             waitfun(wait)
         counter += 1
-
-
-# def spin_prices(c,positions,buttons,task):
-#     pygame.event.clear()    
-#     yesterdays_close = task['current_price'][-1]
-#     n = 100
-#     show1 = True
-#     show2 = False
-#     show3 = False
-#     show4 = False
-
-#     len_spin = 20
-#     width = round(210/len_spin)
-#     counter = 0
-#     while counter < len_spin:
-#         if pygame.event.peek([MOUSEBUTTONDOWN,KEYDOWN,MOUSEBUTTONUP,KEYUP]):
-#             for event in pygame.event.get():
-#                 if event.type==MOUSEBUTTONDOWN:
-#                     c.log('Trial ' + str(task['trial']) + ': Stopping wheels at ' + repr(time.time()) + '\n')
-#                     buttons['stop'].handleEvent(event)
-#                     buttons['stop'].draw(c.screen)
-#                     pygame.display.update()
-#                 elif event.type==MOUSEBUTTONUP:
-#                     if 'click' in buttons['stop'].handleEvent(event):
-#                         c.press_sound.play()
-#                         buttons['place_order'].handleEvent(event)
-#                         buttons['place_order'].draw(c.screen)
-#                         buttons['stop'].draw(c.screen)
-#                         task['pressed_stop'][task['trial']] = 1;
-#                         pygame.display.update()
-#                         c.wait_fun(100)
-#                         counter = 40
-#                 elif event.type == KEYDOWN and event.key == K_SPACE: 
-#                     buttons['stop'].handleEvent(event)
-#                     buttons['stop'].draw(c.screen)
-#                     pygame.display.update()
-#                 elif event.type == KEYUP and event.key == K_SPACE:
-#                     buttons['place_order'].handleEvent(event)
-#                     buttons['place_order'].draw(c.screen)
-#                     buttons['stop'].handleEvent(event)
-#                     buttons['stop'].draw(c.screen)
-#                     pygame.display.update()
-#                     counter = 40
-#         else:  
-#             if 0 < round(time.time()*1000) % n < n/4 and show1:
-#                 num1 = random.randint(1,9)
-#                 c.screen.blit(symbols[str(num1)],(positions['ticker']['x1'],positions['ticker']['y']))
-
-#                 num1_b = random.randint(1,3)
-#                 px_update = pygame.Rect(positions['ticker']['px1']+counter*width-1,positions['ticker']['py']-num1_b*15,width,num1_b*15)
-#                 pygame.draw.rect(c.screen,PX_BLUE,px_update,0)
-
-#                 pygame.display.flip()
-#                 show1 = False
-#                 show2 = True
-#             elif n/4 < round(time.time()*1000) % n < n/2 and show2:
-#                 num2 = random.randint(1,9)
-#                 c.screen.blit(symbols[str(num2)],(positions['ticker']['x2'],positions['ticker']['y']))
-
-#                 num2_b = random.randint(7,9)
-#                 px_update2 = pygame.Rect(positions['ticker']['px2']+counter*width-1,positions['ticker']['py']-num2_b*15,width,num2_b*15)
-#                 pygame.draw.rect(c.screen,PX_BLUE,px_update2,0)
-
-#                 pygame.display.flip()
-#                 show2 = False;
-#                 show3 = True
-#             elif n/2 < round(time.time()*1000) % n < 3*n/4 and show3:
-#                 num3 = random.randint(1,9)
-#                 c.screen.blit(symbols[str(num3)],(positions['ticker']['x3'],positions['ticker']['y']))
-           
-#                 num3_b = random.randint(4,6)
-#                 px_update3 = pygame.Rect(positions['ticker']['px3']+counter*width-1,positions['ticker']['py']-num3_b*15,width,num3_b*15)
-#                 pygame.draw.rect(c.screen,PX_BLUE,px_update3,0)
-
-#                 counter += 1
-
-#                 pygame.display.flip()
-#                 show3 = False
-#                 show4 = True
-#             elif n-10 < round(time.time()*1000) % n < n and show4:
-#                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
-#                 pygame.display.flip()
-#                 show4 = False
-#                 show1 = True
 
 def begin_training_screen(c):
     c.blank_screen()
