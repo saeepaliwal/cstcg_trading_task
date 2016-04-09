@@ -33,6 +33,10 @@ testing = False
 (subjectname) = c.subject_information_screen()
 subject = subjectname.replace(" ","")
 matlab_output_file = c.create_output_file(subjectname)
+if subjectname.find('_') >= 0:
+    subject_num = int(subjectname.split('_')[1])
+else:
+    subject_num = 0
 c.blank_screen()
 
 pygame.mouse.set_visible(False)
@@ -84,9 +88,17 @@ if training:
             probability_trace = f.read().replace('\n', '')
     result_sequence = probability_trace.split(',')
 else:
-    # Randomize blocks for real trials
-    block_order = [1,2,3,4]
-    random.shuffle(block_order)
+
+    if subject_num == 0:
+        # Randomize blocks for real trials
+        block_order = [1,2,3,4]
+        random.shuffle(block_order)
+    else:
+        # Block order
+        with open ('./traces/CSTCG_block_order.txt','r') as f:
+           for i, line in enumerate(f):
+                if i == subject_num-1:
+                    block_order = map(int, line.split(',')[1:5])
 
     for b in block_order:
         with open ('./traces/taskBackend_' + str(b) + '.txt','r') as f:
