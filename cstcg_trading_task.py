@@ -37,6 +37,7 @@ if subjectname.find('_') >= 0:
     subject_num = int(subjectname.split('_')[1])
 else:
     subject_num = 0
+print "Subject number:" + str(subject_num)
 c.blank_screen()
 
 pygame.mouse.set_visible(False)
@@ -92,7 +93,6 @@ else:
     if subject_num == 0:
         # Randomize blocks for real trials
         block_order = [1,2,3,4]
-        random.shuffle(block_order)
     else:
         # Block order
         with open ('./traces/CSTCG_block_order.txt','r') as f:
