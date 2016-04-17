@@ -26,9 +26,11 @@ elif task_stage[0] == 'right':
 c.blank_screen()
 
 testing = False
-# # Kludge for testing
-# training = False
-# testing = True
+
+
+# Kludge for testing
+training = False
+testing = True
 
 (subjectname) = c.subject_information_screen()
 subject = subjectname.replace(" ","")
@@ -92,7 +94,7 @@ else:
 
     if subject_num == 0:
         # Randomize blocks for real trials
-        block_order = [1,2,3,4]
+        block_order = [3,1,2,4]
     else:
         # Block order
         with open ('./traces/CSTCG_block_order.txt','r') as f:
@@ -160,12 +162,12 @@ task['progress'] = 1
 if training:
     task['training'] = True
     START_TRIAL = 0
-    task['account'][START_TRIAL] = 500
+    task['account'][START_TRIAL] = 0
     
 else:
     task['training'] = False
     START_TRIAL = task_block_sequence[1]
-    task['account'][START_TRIAL] = 2000
+    task['account'][START_TRIAL] = 0
 
 # Set up initial screen 
 positions, buttons, sizes = get_screen_elements(c, task)
@@ -198,7 +200,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
             task['training'] = False
             background_music[0].stop()
             end_training_screen(c)
-        task['account'][trial] = 2000
+        task['account'][trial] = 0
         task['current_price'][trial] = open_prices[task['stock']]
         task['current_price'][trial-1] = open_prices[task['stock']]
         task['stock'] = block_order[0]-1
@@ -214,7 +216,8 @@ for trial in range(START_TRIAL,NUM_TRIALS):
         background_music[0].stop()
         change_machine_screen(c)
         task['stock'] = block_order[1]-1
-        task['account'][trial] = 2000
+        task['account'][trial] = 0
+        task['current_price'][trial] = open_prices[task['stock']]
         task['current_block'] = block_order[1]
         task['wheel_hold_buttons'] = wheel_hold_bool[3]
         c.log('Starting block ' + str(block_order[1]) + ' at ' + repr(time.time()) + '\n')
@@ -226,7 +229,8 @@ for trial in range(START_TRIAL,NUM_TRIALS):
         background_music[1].stop()
         change_machine_screen(c)
         task['stock'] = block_order[2]-1
-        task['account'][trial] = 2000
+        task['current_price'][trial] = open_prices[task['stock']]
+        task['account'][trial] = 0
         task['current_block'] = block_order[2]
         task['wheel_hold_buttons'] = wheel_hold_bool[4]
         c.log('Starting block ' + str(block_order[2]) + ' at ' + repr(time.time()) + '\n')
@@ -238,7 +242,8 @@ for trial in range(START_TRIAL,NUM_TRIALS):
         background_music[2].stop()
         change_machine_screen(c)
         task['stock'] = block_order[3]-1
-        task['account'][trial] = 2000
+        task['current_price'][trial] = open_prices[task['stock']]
+        task['account'][trial] = 0
         task['current_block'] = block_order[3]
         task['wheel_hold_buttons'] = wheel_hold_bool[5]
         c.log('Starting block ' + str(block_order[3]) + ' at ' + repr(time.time()) + '\n')
@@ -256,7 +261,7 @@ for trial in range(START_TRIAL,NUM_TRIALS):
 
     # Set stage and selector
     task['trial_stage'] = 'guess'
-    selector_pos = 1
+    selector_pos = 0
 
     if trial > 0 and training:
         task['account'][trial] = task['account'][trial-1] 

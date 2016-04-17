@@ -161,13 +161,13 @@ def selector(c,task,positions,index,selector_pos):
                (180,660),#seven
                (180,730)] # jackpot
 
-    pos = sel_positions[selector_pos-1]
+    pos = sel_positions[selector_pos]
     selected = False
     if index == 1:
         selector_pos += 1
-        if selector_pos == 12:
-            selector_pos = 1
-        pos = sel_positions[selector_pos-1]
+        if selector_pos == 11:
+            selector_pos = 0
+        pos = sel_positions[selector_pos]
     elif index == 8:
         selected = True
         c.log('Selected guess on Trial ' + str(task['trial']) +  ' ' + repr(time.time()) + '\n')
@@ -483,6 +483,7 @@ def stock_split(c,task, positions, sizes,RTB):
 
     if task['training']:
         show_instruction(c,'5')
+    RTB.reset_input_buffer()
     c.screen.fill(WHITE)
     c.screen.blit(card_back,(x_pos,y_pos))
     c.screen.blit(split_font.render("3",True,BLACK),(fpos_x,fpos_y))
@@ -682,18 +683,30 @@ def make_buttons(c,positions,sizes,task,trial_stage):
         caption="Anteile -", fgcolor=GRAY, bgcolor=c.background_color, font=c.button)
 
         if task['wheel_hold_buttons']:
-            buttons['hold1'] = TradingButton(rect=(positions['hold1_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
-            caption="Verkaufen", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
-            if task['ungrey_wheel2']:
+
+            if task['wheel1']:
+                buttons['hold1'] = TradingButton(rect=(positions['hold1_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
+                caption="Verkaufen", fgcolor=WHITE, bgcolor=RED, font=c.button)
+            else:
+                buttons['hold1'] = TradingButton(rect=(positions['hold1_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
+                caption="Verkaufen", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
+
+            if task['ungrey_wheel2'] and not task['wheel2']:
                 buttons['hold2'] = TradingButton(rect=(positions['hold2_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
                 caption="Verkaufen", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
+            elif task['ungrey_wheel2'] and task['wheel2']:
+                buttons['hold2'] = TradingButton(rect=(positions['hold2_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
+                caption="Verkaufen", fgcolor=WHITE, bgcolor=RED, font=c.button)
             else:
                 buttons['hold2'] = TradingButton(rect=(positions['hold2_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
                 caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
 
-            if task['ungrey_wheel3']:     
+            if task['ungrey_wheel3'] and not task['wheel3']:    
                 buttons['hold3'] = TradingButton(rect=(positions['hold3_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
                 caption="Verkaufen", fgcolor=WHITE, bgcolor=GOLD, font=c.button)
+            elif task['ungrey_wheel3'] and task['wheel3']:  
+                buttons['hold3'] = TradingButton(rect=(positions['hold3_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
+                caption="Verkaufen", fgcolor=WHITE, bgcolor=RED, font=c.button)
             else:
                 buttons['hold3'] = TradingButton(rect=(positions['hold3_x'],positions['hold_y'], sizes['sbw'],sizes['xsbh']),\
                 caption="Verkaufen", fgcolor=WHITE, bgcolor=GRAY, font=c.button)
@@ -764,7 +777,7 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
     show3 = False
     show4 = False
 
-    len_spin = 50
+    len_spin = 100
     width = round(210/(len_spin+5))
 
     task['wheel1'] = False
@@ -778,12 +791,12 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
 
     keep_spinning = True
     while keep_spinning:
-        if counter == 15:
+        if counter == 30:
             task['ungrey_wheel2'] = True
             buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
             for key in buttons:
                 buttons[key].draw(c.screen)
-        elif counter == 30:
+        elif counter == 60:
             task['ungrey_wheel3'] = True
             buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
             for key in buttons:
@@ -817,6 +830,9 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                         if 'click' in buttons['hold1'].handleEvent(event):
                             task['wheel1'] = True
                             eeg_trigger(c,task,'pressed_stop_1')
+                            buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
+                            for key in buttons:
+                                buttons[key].draw(c.screen)
                             c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                             show_result(c,positions,buttons,task,spinning=True)
                             buttons['hold1'].draw(c.screen)
@@ -826,6 +842,9 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                             if 'click' in buttons['hold2'].handleEvent(event):
                                 task['wheel2'] = True
                                 eeg_trigger(c,task,'pressed_stop_2')
+                                buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
+                                for key in buttons:
+                                    buttons[key].draw(c.screen)
                                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                                 show_result(c,positions,buttons,task, spinning=True)
                                 buttons['hold2'].draw(c.screen)                                
@@ -838,6 +857,9 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                                     eeg_trigger(c,task,'pressed_stop_3_win')
                                 else:
                                     eeg_trigger(c,task,'pressed_stop_3_loss')
+                                buttons = make_buttons(c,positions,sizes,task,task['trial_stage'])
+                                for key in buttons:
+                                    buttons[key].draw(c.screen)
                                 c.screen.blit(spin_cover,(positions['ticker']['base_x'],positions['ticker']['base_y']))
                                 show_result(c,positions,buttons,task, spinning=True)
                                 buttons['hold3'].draw(c.screen)
