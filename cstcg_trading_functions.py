@@ -133,7 +133,7 @@ def is_odd(num):
 def show_instruction(c,stage):
     c.screen.blit(training_info[stage],(c.center_x-training_info[stage].get_width()/2, c.center_y-training_info[stage].get_height()/2))
     pygame.display.update()
-    c.wait_fun(2000)
+    c.wait_fun(5000)
 
 def selector(c,task,positions,index,selector_pos):
     if platform.system() == 'Windows':
@@ -479,7 +479,7 @@ def stock_split(c,task, positions, sizes,RTB):
     CARD = pygame.USEREVENT + 1
     pygame.time.set_timer(CARD, 1000)
     time_elapsed = 0
-    start_time = time.time()
+    
 
     if task['training']:
         show_instruction(c,'5')
@@ -491,6 +491,7 @@ def stock_split(c,task, positions, sizes,RTB):
     gamble_button.draw(c.screen)
     no_gamble_button.draw(c.screen)
     pygame.display.update()
+    start_time = time.time()
 
     while not decided and time_elapsed < 3:
         time_elapsed = int(round(time.time()-start_time))
@@ -1110,7 +1111,7 @@ def begin_training_screen(c):
     c.blank_screen()
     c.log('Training beginning at ' + repr(time.time()) + '\n')
 
-    c.text_screen('Die n'+ae+'chsten 6 Spiele sind zum '+Ue+'ben da. Die Punkte z'+ae+'hlen nicht zu ihrem Endergebnis dazu.', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
+    c.text_screen('Die n'+ae+'chsten 6 Spiele sind zum '+ue+'ben da. Die Punkte z'+ae+'hlen nicht zu ihrem Endergebnis dazu.', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
 
 
 def eeg_trigger(c,task,stage):

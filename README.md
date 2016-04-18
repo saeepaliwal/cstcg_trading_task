@@ -1,1 +1,1 @@
-Financial Trading Task
+CSTCG: Financial Trading Task
