@@ -27,10 +27,9 @@ c.blank_screen()
 
 testing = False
 
-
-# Kludge for testing
-training = False
-testing = True
+# # Kludge for testing
+# training = False
+# testing = True
 
 (subjectname) = c.subject_information_screen()
 subject = subjectname.replace(" ","")
@@ -49,7 +48,7 @@ currency = 'points'
 # Initialize response box:
 if response_box: 
     if platform.system() == 'Darwin': # Mac
-        RTB = serial.Serial(baudrate=115200, port='/dev/tty.usbserial-142', timeout=0)
+        RTB = serial.Serial(baudrate=115200, port='/dev/tty.usbserial-141', timeout=0)
     elif platform.system() == 'Windows': # Windows
         RTB = serial.Serial(baudrate=115200, port='COM4', timeout=0)
 
