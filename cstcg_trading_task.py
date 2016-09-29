@@ -1,25 +1,9 @@
 # -*- coding: utf-8 -*-    
-#-----------------------------------------------------------------------------------------------------
-#                                                                                      
-#                               THE SHELL GAME
-#                                                            
-# Saee Paliwal
-# Created: February 2016
-# Last Change: August 2016
-#
-#
-# Description: 
-# This is a virtual slot machine with a set win/loss trace
-# The order of blocks in the game is randomized.
-#
-# It loads a tracefile which contains the order and outcome of the stimuli tested                  
-#-----------------------------------------------------------------------------------------------------
-
 from __future__ import division
+import serial
 from choice_task import ChoiceTask
 import pygame
 from pygame.locals import *
-from cstcg_trading_functions import *
 from trading_buttons import TradingButton
 import random
 import numpy as np
@@ -30,6 +14,7 @@ from scipy.io import savemat
 import platform
 from psychopy import core
 import sys
+
 
 #####################################################################################################
 
@@ -63,14 +48,12 @@ ORANGE = (255, 140,   0)
 TX_GREEN = (57, 255, 20)
 BLACK = (0,0,0)
 TX_RED = (249, 15, 0)
+YELLOW = ( 231, 182,  40)
 PX_BLUE = ( 102, 255, 255)
 
 money_font = pygame.font.Font('./fonts/DS-DIGIB.TTF',80)
 progress_font = pygame.font.Font('./fonts/DS-DIGIB.TTF',30)
 big_button = pygame.font.Font('./fonts/GenBasB.ttf',90)
-
-
-# Load images
 intro = pygame.image.load('./images/trading_task_welcome_banner.png').convert_alpha()
 small_win = pygame.image.load('./images/symbols_smallwin.png').convert_alpha()
 big_win = pygame.image.load('./images/symbols_megawin.png').convert_alpha()
@@ -96,18 +79,27 @@ matlab_output_file = c.create_output_file(subjectname)
 
 testing = False
 
-# Initialize response box:
-response_box = True
-if response_box: 
+def establish_connection(RTB=None):
     try: 
         if platform.system() == 'Darwin': # Mac
             RTB = serial.Serial(baudrate=115200, port='/dev/tty.usbserial-141', timeout=0)
+            status = 1
         elif platform.system() == 'Windows': # Windows
             RTB = serial.Serial(baudrate=115200, port='COM4', timeout=0)
+            status = 1
     except Exception:
-        c.blank_screen()
-        c.text_screen('Please connect the response box. I will exit in 2 seconds.', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=2000) 
-        exit()     
+        status = 0
+    return status, RTB
+
+# Initialize response box:
+global RTB
+while True:
+    status, RTB = establish_connection()
+    if status == 0:
+        print "Caught in first while loop"
+        pygame.time.wait(10)
+    else:
+        break
 
 # # Kludge for testing
 # training = False
@@ -123,6 +115,7 @@ background_music.append(pygame.mixer.Sound('./sounds/ticker1_music.wav'))
 background_music.append(pygame.mixer.Sound('./sounds/ticker2_music.wav'))
 for i in range(4):
     background_music[i].set_volume(0.0)
+
 
 # Task trace:
 result_sequence = []
@@ -675,6 +668,7 @@ def welcome_screen(c, wait_time=3000):
     c.attn_screen(attn=intro,wait_time=wait_time)
 
 def instruction_screen(c,positions,sizes):
+    global RTB
 
     back_button = TradingButton(rect=(positions['gamble_x'],positions['gamble_y'], sizes['bbw'],sizes['sbh']),\
         caption="Zurueck",  fgcolor=c.background_color, bgcolor=RED, font=c.button)
@@ -690,9 +684,10 @@ def instruction_screen(c,positions,sizes):
         c.top_y-instructions[str(counter)].get_height()/8))  
     next_button.draw(c.screen)
     pygame.display.update()
-    key_press = []
+    
     instructions_done = False
     while not instructions_done:
+        key_press = []
         try: 
             key_press = RTB.read() 
         except: 
@@ -731,18 +726,6 @@ def instruction_screen(c,positions,sizes):
                     else:
                         next_button.draw(c.screen)
                     pygame.display.update()
-
-def establish_connection(RTB=None):
-    try: 
-        if platform.system() == 'Darwin': # Mac
-            RTB = serial.Serial(baudrate=115200, port='/dev/tty.usbserial-141', timeout=0)
-            status = 1
-        elif platform.system() == 'Windows': # Windows
-            RTB = serial.Serial(baudrate=115200, port='COM4', timeout=0)
-            status = 1
-    except Exception:
-        status = 0
-    return status, RTB
 
 def begin_training_screen(c):
     c.blank_screen()
@@ -808,6 +791,7 @@ def show_win_banner(c,positions,reward):
     c.text_screen('Gewinnbericht: ' + str(reward) + 'points', font=c.title,font_color=GOLD, valign='top', y_displacement= -200, wait_time=1500)
 
 def stock_split(c,task, positions, sizes):
+    global RTB
     reset = False
     while not reset:
         try: 
@@ -947,6 +931,7 @@ def show_result(c,positions,buttons,task, spinning=False):
             spin_prices(c, positions, buttons, task)
 
 def process_result(c,positions,buttons,sizes,task):
+    global RTB
     percent_change = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
     task['current_price'][task['trial']] = task['current_price'][task['trial']-1]
 
@@ -1002,6 +987,20 @@ def print_prices_spin(px1):
     return px,px2,offset
 
 def individual_price_spin(c,positions,buttons,sizes,task):
+    global RTB
+    reset = False
+    while not reset:
+        try: 
+            RTB.reset_input_buffer()
+            reset = True
+        except: 
+            while True:
+                status, RTB = establish_connection()
+                if status == 0:
+                    pygame.time.wait(10)
+                else:
+                    break
+
     pygame.event.clear()
     lag = 10
     show1 = True
@@ -1155,6 +1154,21 @@ def individual_price_spin(c,positions,buttons,sizes,task):
 
 
 def spin_prices(c, positions, buttons, task):
+    global RTB
+
+    reset = False
+    while not reset:
+        try: 
+            RTB.reset_input_buffer()
+            reset = True
+        except: 
+            while True:
+                status, RTB = establish_connection()
+                if status == 0:
+                    pygame.time.wait(10)
+                else:
+                    break
+
     wait = 300
     pygame.event.clear()    
     lag = 10

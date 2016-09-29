@@ -838,16 +838,6 @@ def print_prices_spin(px1):
 
 def individual_price_spin(c,positions,buttons,sizes,task, RTB):
 
-    try: 
-        RTB.reset_input_buffer()
-    except: 
-        while True:
-            status, RTB = establish_connection()
-            if status == 0:
-                pygame.time.wait(10)
-            else:
-                break
-
     pygame.event.clear()
     lag = 10
     show1 = True
@@ -1002,16 +992,6 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
 
 
 def spin_prices(c, positions, buttons, task):
-   
-    try: 
-        RTB.reset_input_buffer()
-    except: 
-        while True:
-            status, RTB = establish_connection()
-            if status == 0:
-                pygame.time.wait(10)
-            else:
-                break
 
     wait = 300
     pygame.event.clear()    
