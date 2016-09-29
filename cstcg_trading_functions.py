@@ -414,7 +414,16 @@ def instruction_screen(c,positions,sizes,RTB):
     pygame.display.update()
     instructions_done = False
     while not instructions_done:
-        key_press = RTB.read() 
+        try: 
+            key_press = RTB.read() 
+        except: 
+            while True:
+                status, RTB = establish_connection()
+                if status == 0:
+                    pygame.time.wait(10)
+                else:
+                    break
+
         if len(key_press):
             key_index = ord(key_press)
             events = process_rtb(positions,key_index, 'instructions','False')
@@ -444,6 +453,19 @@ def instruction_screen(c,positions,sizes,RTB):
                         next_button.draw(c.screen)
                     pygame.display.update()
 
+def establish_connection(RTB=None):
+    try: 
+        if platform.system() == 'Darwin': # Mac
+            RTB = serial.Serial(baudrate=115200, port='/dev/tty.usbserial-141', timeout=0)
+            status = 1
+        elif platform.system() == 'Windows': # Windows
+            RTB = serial.Serial(baudrate=115200, port='COM4', timeout=0)
+            status = 1
+    except Exception:
+        status = 0
+
+    return status, RTB
+
 def clear(c,task):
     if len(task['trade_sequence']) > 0:
         if task['trade_size'][task['trial']] > 0:
@@ -453,7 +475,19 @@ def clear(c,task):
     return task
 
 def stock_split(c,task, positions, sizes,RTB):
-    RTB.reset_input_buffer()
+    reset = False
+    while not reset:
+        try: 
+            RTB.reset_input_buffer()
+            reset = True
+        except: 
+            while True:
+                status, RTB = establish_connection()
+                if status == 0:
+                    pygame.time.wait(10)
+                else:
+                    break
+
     c.screen.fill(WHITE)
     card_back = pygame.image.load('./images/trading_task_news1.png').convert_alpha()
     card_won = pygame.image.load('./images/trading_task_news_win.png').convert_alpha()
@@ -483,7 +517,20 @@ def stock_split(c,task, positions, sizes,RTB):
 
     if task['training']:
         show_instruction(c,'5')
-    RTB.reset_input_buffer()
+
+    reset = False
+    while not reset:
+        try: 
+            RTB.reset_input_buffer()
+            reset = True
+        except: 
+            while True:
+                status, RTB = establish_connection()
+                if status == 0:
+                    pygame.time.wait(10)
+                else:
+                    break
+
     c.screen.fill(WHITE)
     c.screen.blit(card_back,(x_pos,y_pos))
     c.screen.blit(split_font.render("3",True,BLACK),(fpos_x,fpos_y))
@@ -495,7 +542,15 @@ def stock_split(c,task, positions, sizes,RTB):
 
     while not decided and time_elapsed < 3:
         time_elapsed = int(round(time.time()-start_time))
-        key_press = RTB.read() 
+        try: 
+            key_press = RTB.read() 
+        except: 
+            while True:
+                status, RTB = establish_connection()
+                if status == 0:
+                    pygame.time.wait(10)
+                else:
+                    break 
         if len(key_press):
             key_index = ord(key_press)
             events = process_rtb(positions,key_index, 'gamble',task['wheel_hold_buttons'])
@@ -643,8 +698,19 @@ def process_result(c,positions,buttons,sizes,task, RTB):
         task['winloss'][task['trial']] = reward
 
     if int(task['result_sequence'][task['trial']][4]) == 1:
-        task = stock_split(c, task, positions, sizes, RTB)
-        c.screen.fill(c.background_color)
+        gambled = False
+        while not gambled:
+            try: 
+                task = stock_split(c, task, positions, sizes, RTB)
+                c.screen.fill(c.background_color)
+                gambled = True
+            except: 
+                while True:
+                    status, RTB = establish_connection()
+                    if status == 0:
+                        pygame.time.wait(10)
+                    else:
+                        break
 
     task = update_account(c,positions, sizes, task)
     return task
@@ -771,6 +837,17 @@ def print_prices_spin(px1):
     return px,px2,offset
 
 def individual_price_spin(c,positions,buttons,sizes,task, RTB):
+
+    try: 
+        RTB.reset_input_buffer()
+    except: 
+        while True:
+            status, RTB = establish_connection()
+            if status == 0:
+                pygame.time.wait(10)
+            else:
+                break
+
     pygame.event.clear()
     lag = 10
     show1 = True
@@ -804,7 +881,17 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
                 buttons[key].draw(c.screen)
         pygame.display.flip()
 
-        key_press = RTB.read() 
+
+        try: 
+            key_press = RTB.read() 
+        except: 
+            while True:
+                status, RTB = establish_connection()
+                if status == 0:
+                    pygame.time.wait(10)
+                else:
+                    break 
+
         if len(key_press):
             key_index = ord(key_press)
             events = process_rtb(positions,key_index, 'pull', task['wheel_hold_buttons'], task)
@@ -915,6 +1002,17 @@ def individual_price_spin(c,positions,buttons,sizes,task, RTB):
 
 
 def spin_prices(c, positions, buttons, task):
+   
+    try: 
+        RTB.reset_input_buffer()
+    except: 
+        while True:
+            status, RTB = establish_connection()
+            if status == 0:
+                pygame.time.wait(10)
+            else:
+                break
+
     wait = 300
     pygame.event.clear()    
     lag = 10
