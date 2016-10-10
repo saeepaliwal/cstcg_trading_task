@@ -213,9 +213,9 @@ class ChoiceTask():
     def subject_information_screen(self):
 
         self.make_banner(self.header.render("Please enter your information below",True,self.header_color))
-        question = "Name"
+        question = "PPID: CSTCG_"
         current_string = []
-        self.text_input(question + ":| " + string.join(current_string,""))
+        self.text_input(question + " " + string.join(current_string,""))
         
        
         continue_button= TaskButton(rect=(self.center_x-100,self.center_y, 200,70),\
@@ -247,15 +247,15 @@ class ChoiceTask():
                     elif event.type == pygame.QUIT:
                         pygame.quit()
                         exit()
-                    self.text_input(question + ": " + string.join(current_string,""))
+                    self.text_input(question + "" + string.join(current_string,""))
 
                 continue_button.draw(self.screen)
                 pygame.display.update()
                 # self.wait_fun(milliseconds=300)
             elif 0 < round(time.time()*1000) % 700 < 350 and len(current_string)==0:
-                self.text_input(question + ": ")
+                self.text_input(question + " ")
             elif 350 < round(time.time()*1000) % 700 < 700 and len(current_string)==0:
-                self.text_input(question + ":| ")
+                self.text_input(question + "| ")
         return (string.join(current_string,""))
 
     def make_banner(self,text):

@@ -68,16 +68,19 @@ if task_stage[0] == 'left':
 elif task_stage[0] == 'right':
     training = False
 
+testing = False
 c.blank_screen()
 (subjectname) = c.subject_information_screen()
 subject = subjectname.replace(" ","")
 if subjectname.find('_') >= 0:
     subject_num = int(subjectname.split('_')[1])
-else:
+elif subjectname == 'test':
+    testing = True
     subject_num = 0
+else:
+    subject_num = int(subjectname)
 matlab_output_file = c.create_output_file(subjectname)
 
-testing = False
 
 def establish_connection(RTB=None):
     try: 
@@ -101,9 +104,7 @@ while True:
     else:
         break
 
-# # Kludge for testing
-# training = False
-# testing = True
+
 
 pygame.mouse.set_visible(False)
 currency = 'points'
@@ -745,7 +746,7 @@ def change_machine_screen(c):
     waitfun(1000)
     c.log('Changing machines at ' + repr(time.time()) + '\n')
     c.blank_screen()
-    c.text_screen('Gut gemacht! Jetzt geht es weiter auf der n'+ae+'chsten strukturiertes Produkt!', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
+    c.text_screen('Gut gemacht! Jetzt geht es weiter auf das n'+ae+'chsten strukturiertes Produkt!', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
 
 def waitfun(milliseconds):
     nowtime = pygame.time.get_ticks()
