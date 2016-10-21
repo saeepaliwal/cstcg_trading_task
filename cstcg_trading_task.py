@@ -746,7 +746,7 @@ def change_machine_screen(c):
     waitfun(1000)
     c.log('Changing machines at ' + repr(time.time()) + '\n')
     c.blank_screen()
-    c.text_screen('Gut gemacht! Jetzt geht es weiter auf das n'+ae+'chsten strukturiertes Produkt!', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
+    c.text_screen('Gut gemacht! Jetzt geht es weiter auf dem n'+ae+'chsten strukturierten Produkt!', font=c.header, font_color=GOLD, valign='center', y_displacement= -45, wait_time=4000) 
 
 def waitfun(milliseconds):
     nowtime = pygame.time.get_ticks()
