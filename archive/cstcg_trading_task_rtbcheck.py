@@ -86,7 +86,7 @@ def establish_connection(RTB=None):
     try:
         RTB.close()
     except:
-        print 'RTB is already closed'
+        continue
 
     while status == 0:
         try: 
